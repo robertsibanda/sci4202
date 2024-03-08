@@ -22,6 +22,7 @@
         app:layout_constraintGuide_percent="0.98" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navBottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_menu"

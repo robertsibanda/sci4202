@@ -19,7 +19,6 @@ public class UserNotificationRecyclerViewAdapter
         extends RecyclerView.Adapter <UserNotificationRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<UserNotification> notifications;
-    private Context context;
 
     @NonNull
     @Override

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/notification_background"
+    android:backgroundTint="#7C8692F7"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/lblTestDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date of Test"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lblTestName"
+        app:layout_constraintEnd_toStartOf="@+id/txtTestDate"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/lblTestName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Name"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lblTestCode"
+        app:layout_constraintEnd_toStartOf="@+id/txtTestName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTestDate" />
+
+    <TextView
+        android:id="@+id/lblTestCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Code"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lblResultName"
+        app:layout_constraintEnd_toStartOf="@+id/txtTestCode"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTestName" />
+
+
+    <TextView
+        android:id="@+id/lblResultName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lblResultCode"
+        app:layout_constraintEnd_toStartOf="@+id/txtTestResult"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTestCode" />
+
+    <TextView
+        android:id="@+id/lblResultCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result Code"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtResultCode"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblResultName" />
+
+    <TextView
+        android:id="@+id/txtTestDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12-12-12"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtTestName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblTestDate"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTestName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HIV/AIDS"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtTestCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblTestName"
+        app:layout_constraintTop_toBottomOf="@+id/txtTestDate" />
+
+    <TextView
+        android:id="@+id/txtTestCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12-12-12"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtTestResult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblTestCode"
+        app:layout_constraintTop_toBottomOf="@+id/txtTestName" />
+
+    <TextView
+        android:id="@+id/txtTestResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="negative"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtResultCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblResultName"
+        app:layout_constraintTop_toBottomOf="@+id/txtTestCode" />
+
+    <TextView
+        android:id="@+id/txtResultCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-ve"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblResultCode"
+        app:layout_constraintTop_toBottomOf="@+id/txtTestResult" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

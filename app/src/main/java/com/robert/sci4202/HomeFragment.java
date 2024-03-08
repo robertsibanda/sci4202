@@ -10,11 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.robert.sci4202.data.UserData;
+import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.UserNotification;
 import com.robert.sci4202.recyclerviews.UserNotificationRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +72,12 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
+        UserDatabase userDatabase = UserDatabase.getINSTANCE(view.getContext());
+        List<UserData> userData =  userDatabase.userDataDAO().getAllUserData();
+
+        String fullName = userData.get(0).fullName;
+        TextView txtFullName =  view.findViewById(R.id.txtFullName);
+        txtFullName.setText("Welcome " + fullName);
         RecyclerView recyclerView = view.findViewById(R.id.recviewHome);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
@@ -77,6 +87,10 @@ public class HomeFragment extends Fragment {
 
         ArrayList<UserNotification> userNotifications = new ArrayList<>();
         //TODO add new user notifications
+        userNotifications.add(new UserNotification("Security", "Please do not share your password with strangers", "001"));
+        userNotifications.add(new UserNotification("Security", "Please do not share your password with strangers", "001"));
+        userNotifications.add(new UserNotification("Security", "Please do not share your password with strangers", "001"));
+        userNotifications.add(new UserNotification("Security", "Please do not share your password with strangers", "001"));
         userNotificationRecyclerViewAdapter.setNotifications(userNotifications);
         recyclerView.setAdapter(userNotificationRecyclerViewAdapter);
         return view;

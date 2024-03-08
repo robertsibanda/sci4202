@@ -3,10 +3,21 @@ package com.robert.sci4202;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.material.navigation.NavigationView;
+import com.robert.sci4202.objects.MyDoctorItem;
+import com.robert.sci4202.objects.Note;
+import com.robert.sci4202.recyclerviews.MyDoctorRecyclerviewAdapter;
+import com.robert.sci4202.recyclerviews.NotesRecyclerviewAdapter;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +71,60 @@ public class CareFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view  =  inflater.inflate(R.layout.fragment_care, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recviewPatientInfor);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        Button btnMedicine, btnNotes, btnPrescription, btnDoctors, btnHistory, btnLabResults;
+
+        view.findViewById(R.id.btnPatientNotes).setOnClickListener(l -> {
+            // show patient notes on recyclerview
+            NotesRecyclerviewAdapter notesRecyclerviewAdapter = new NotesRecyclerviewAdapter();
+            ArrayList<Note> notes = new ArrayList<>();
+            notes.add(new Note("12-12-12", "this is my new note", "dr james"));
+            notes.add(new Note("12-12-12", "this is my new note", "dr james"));
+            notes.add(new Note("12-12-12", "this is my new note", "dr james"));
+
+            notesRecyclerviewAdapter.setNotes(notes);
+
+            recyclerView.setAdapter(notesRecyclerviewAdapter);
+        });
+
+
+        view.findViewById(R.id.btnPatientMedicine).setOnClickListener( l -> {
+            // show patient medicine
+        });
+
+        view.findViewById(R.id.btnPatientDiseases).setOnClickListener( l -> {
+            // show patient diseases
+        });
+
+        view.findViewById(R.id.btnPatientDoctors).setOnClickListener( l -> {
+            // show patient doctors
+
+            MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
+                    new MyDoctorRecyclerviewAdapter();
+
+            ArrayList<MyDoctorItem> myDoctorItems = new ArrayList<>();
+            myDoctorItems.add(new MyDoctorItem("James Brown", "imgurl", "", ""));
+            myDoctorItems.add(new MyDoctorItem("James Brown", "imgurl", "", ""));
+            myDoctorItems.add(new MyDoctorItem("James Brown", "imgurl", "", ""));
+            myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
+            recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
+        });
+
+        view.findViewById(R.id.btnPatientMedicine).setOnClickListener( l -> {
+            // show patient history
+        });
+
+        view.findViewById(R.id.btnPatientLabResults).setOnClickListener( l -> {
+            // show patient lab results
+        });
+        // recyclerview for displaying all the patient care information based on category selected
+
+        // navigation view for replacing recyclerview
+        NavigationView navigationView = view.findViewById(R.id.viewPatientInforNav);
+
         return view;
     }
 }

@@ -53,6 +53,7 @@
             android:id="@+id/imgUserProfile"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/middleGuideHeader"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,16 +62,15 @@
             />
 
         <TextView
+            android:id="@+id/txtFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/middleGuideHeader"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/topGuideHeader"
-            app:layout_constraintRight_toRightOf="parent"
             android:text="Welcome Mr Person"
+            android:textSize="18dp"
             android:textStyle="bold"
-            android:textSize="20dp"
-            />
+            app:layout_constraintBottom_toTopOf="@id/topGuideHeader"
+            app:layout_constraintLeft_toRightOf="@id/middleGuideHeader"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:layout_width="0dp"
@@ -81,7 +81,7 @@
             app:layout_constraintTop_toBottomOf="@id/topGuideHeader"
             app:layout_constraintBottom_toBottomOf="parent"
             android:drawableEnd="@drawable/minimalistic_magnifer_svgrepo_com"
-            android:hint="search patient"
+            android:hint="search doctor"
             android:padding="5dp"
             android:textAlignment="center"
             />
