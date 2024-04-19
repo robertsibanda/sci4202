@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    tools:context=".AddAllegeFragment">
+
+    <EditText
+        android:id="@+id/etAllegeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Allege Name"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/etAllegeRaction"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etAllegeRaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Allege Reaction"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/etAllegeNote"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAllegeName" />
+
+    <EditText
+        android:id="@+id/etAllegeNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Allege note"
+        android:layout_margin="8dp"
+        android:inputType="text|textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/btnSavePrescription"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAllegeRaction" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnSaveAllege"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:drawableLeft="@drawable/check_circle_svgrepo_com"
+        android:text="Save Allege"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAllegeNote" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

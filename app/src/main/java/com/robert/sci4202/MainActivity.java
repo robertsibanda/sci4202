@@ -10,11 +10,7 @@ import com.robert.sci4202.data.UserDatabase;
 
 import java.util.List;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -25,16 +21,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNavigationView;
+        bottomNavigationView = findViewById(R.id.navBottomNav);
+
+
         UserDatabase userDatabase = UserDatabase.getINSTANCE(this.getApplicationContext());
         List<UserData> userData = userDatabase.userDataDAO().getAllUserData();
+
 
         if (userData.isEmpty()) {
             Toast.makeText(this, "Please login to use our service", Toast.LENGTH_LONG).show();
             startActivity(new Intent(this.getApplicationContext(), LoginActivity.class));
         }
+        else {
+            showFragment(new HomeFragment());
 
-        showFragment(new HomeFragment());
-        BottomNavigationView bottomNavigationView =findViewById(R.id.navBottomNav);
+            if(userData.get(0).userType.equals("doctor")) {
+                try{
+                    bottomNavigationView.inflateMenu(R.menu.bottom_menu_doc);
+                }catch (Exception ex) {
+                    System.out.println("Error at navbar : " + ex.getMessage());
+                }
+            }
+
+            else {
+                try{
+                    bottomNavigationView.inflateMenu(R.menu.bottom_menu);
+                }catch (Exception ex) {
+                    System.out.println("Error at navbar : " + ex.getMessage());
+                }
+            }
+        }
+
+
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         bottomNavigationView.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.bottom_home) {
@@ -42,8 +61,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
             else if (item.getItemId() == R.id.bottom_data) {
-                showFragment(new CareFragment());
-                return true;
+                if (userDatabase.userDataDAO().getAllUserData().get(0).userType.equals("doctor")) {
+                   //show care fragment for doctors
+                    showFragment(new DoctorPatientCareFragment());
+                    return true;
+                }
+                else {
+                    showFragment(new CareFragment());
+                    return true;
+                }
             }
 
             else if (item.getItemId() == R.id.bottom_settings) {

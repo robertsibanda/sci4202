@@ -1,13 +1,16 @@
 package com.robert.sci4202.objects;
 
 public class CalenderItem {
-    private String title, date, time;
+    private String title, date, time, other_person;
 
 
-    public CalenderItem(String title, String date, String time) {
+    public CalenderItem(String title, String date, String time,
+                        String otherPerson) {
         this.title = title;
         this.date = date;
         this.time = time;
+        this.other_person = otherPerson;
+        System.out.println("This is calender event : " + date + " -> " + time);
     }
 
     public String getTitle() {
@@ -32,5 +35,13 @@ public class CalenderItem {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getOther_person() {
+        return other_person;
+    }
+
+    public void setOther_person(String other_person) {
+        this.other_person = other_person;
     }
 }

@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="140dp"
+    android:backgroundTint="#7C8692F7"
+    android:padding="8dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/notification_background">
 
+    <TextView
+        android:id="@+id/txtPrescriptionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12-12-12"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/txtDoc"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtPrescriptionDoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dr Mike"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtDate" />
+
+    <TextView
+        android:id="@+id/txtPrescriptionMedicine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paracetamol"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPrescriptionDate"
+        />
+
+    <TextView
+        android:id="@+id/txtPrescriptionQty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24 tablets"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPrescriptionMedicine    "
+        />
+
+    <TextView
+        android:id="@+id/txtPrescriptionNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take 3 daily"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPrescriptionQty"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

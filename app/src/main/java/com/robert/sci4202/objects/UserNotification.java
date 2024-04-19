@@ -1,12 +1,33 @@
 package com.robert.sci4202.objects;
 
 public class UserNotification {
-    private String notificationType, notificationText, notificationID;
+    private String notificationTitle, notificationType, notificationID, notificationContent, other_;
 
-    public UserNotification(String notificationType, String notificationText, String notificationID) {
-        this.notificationType = notificationType;
-        this.notificationText = notificationText;
+    public UserNotification(String notificationType, String notificationTitle, String notificationID, String notificationContent, String other) {
+        this.notificationTitle = notificationTitle;
         this.notificationID = notificationID;
+        this.notificationContent = notificationContent;
+        this.notificationType = notificationType;
+        this.other_ = other;
+    }
+
+    @Override
+    public String toString() {
+        return "UserNotification{" +
+                "notificationTitle='" + notificationTitle + '\'' +
+                ", notificationType='" + notificationType + '\'' +
+                ", notificationID='" + notificationID + '\'' +
+                ", notificationContent='" + notificationContent + '\'' +
+                ", other_='" + other_ + '\'' +
+                '}';
+    }
+
+    public String getNotificationTitle() {
+        return notificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
     }
 
     public String getNotificationType() {
@@ -17,19 +38,27 @@ public class UserNotification {
         this.notificationType = notificationType;
     }
 
-    public String getNotificationText() {
-        return notificationText;
-    }
-
-    public void setNotificationText(String notificationText) {
-        this.notificationText = notificationText;
-    }
-
     public String getNotificationID() {
         return notificationID;
     }
 
     public void setNotificationID(String notificationID) {
         this.notificationID = notificationID;
+    }
+
+    public String getNotificationContent() {
+        return notificationContent;
+    }
+
+    public void setNotificationContent(String notificationContent) {
+        this.notificationContent = notificationContent;
+    }
+
+    public String getOther_() {
+        return other_;
+    }
+
+    public void setOther_(String other_) {
+        this.other_ = other_;
     }
 }

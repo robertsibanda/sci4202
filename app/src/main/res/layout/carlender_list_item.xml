@@ -15,8 +15,7 @@
         app:layout_constraintTop_toBottomOf="@id/topGuide"
         android:background="@drawable/notification_background"
         android:backgroundTint="#D7D1D1"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -62,8 +61,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/innerTopguide"
             app:layout_constraintRight_toLeftOf="@id/innerLeftGuide"
-            android:layout_margin="20dp"
-            />
+            android:layout_margin="20dp" />
 
         <ImageView
             android:layout_width="30dp"
@@ -73,19 +71,8 @@
             app:layout_constraintTop_toBottomOf="@id/innerTopguide"
             app:layout_constraintBottom_toTopOf="@id/innerMiddleguide"
             android:src="@drawable/bell_bing_svgrepo_com"
-            android:layout_margin="20dp"
-            />
+            android:layout_margin="20dp" />
 
-
-        <ImageView
-            android:id="@+id/btnDeteleEvent"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="30dp"
-            android:src="@drawable/trash_bin_minimalistic_svgrepo_com"
-            app:layout_constraintLeft_toRightOf="@id/innerRightGuide"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtEventTitle"
@@ -97,6 +84,20 @@
             app:layout_constraintBottom_toTopOf="@id/innerTopguide"
             app:layout_constraintLeft_toRightOf="@id/innerLeftGuide"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtOtherPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="Patient Visit"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/innerTopguide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/innerLeftGuide"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.428" />
 
         <TextView
             android:id="@+id/txtEventTime"

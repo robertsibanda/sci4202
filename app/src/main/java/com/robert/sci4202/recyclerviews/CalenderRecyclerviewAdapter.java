@@ -13,21 +13,25 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CalenderRecyclerviewAdapter extends RecyclerView.Adapter<CalenderRecyclerviewAdapter.ViewHolder>{
+public class CalenderRecyclerviewAdapter extends RecyclerView.Adapter<CalenderRecyclerviewAdapter.ViewHolder> {
 
     private ArrayList<CalenderItem> calenderItems = new ArrayList<>();
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext())
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                         int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.carlender_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder,
+                                 int position) {
         holder.eventTime.setText(calenderItems.get(position).getTime());
         holder.eventTitle.setText(calenderItems.get(position).getTitle());
+        holder.txtOtherPerson.setText(calenderItems.get(position).getOther_person());
     }
 
     @Override
@@ -41,11 +45,13 @@ public class CalenderRecyclerviewAdapter extends RecyclerView.Adapter<CalenderRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eventTitle, eventTime;
+        TextView eventTitle, eventTime, txtOtherPerson;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventTitle = itemView.findViewById(R.id.txtEventTitle);
             eventTime = itemView.findViewById(R.id.txtEventTime);
+            txtOtherPerson = itemView.findViewById(R.id.txtOtherPerson);
         }
     }
 }

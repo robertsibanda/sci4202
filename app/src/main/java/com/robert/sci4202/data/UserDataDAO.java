@@ -23,6 +23,10 @@ public interface UserDataDAO {
 
     @Query("SELECT * FROM user_data")
     List<UserData> getAllUserData();
+
+    @Query("DELETE FROM user_data")
+    void deleteAll();
+
     @Query("SELECT * from user_data where user_name==:username")
     UserData getUserData(String username);
 }

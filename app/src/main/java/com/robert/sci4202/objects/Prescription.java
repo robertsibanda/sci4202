@@ -1,11 +1,11 @@
 package com.robert.sci4202.objects;
 
 public class Prescription {
-    private String medication, code, date, quantity, doctor;
+    private String medication, note, date, quantity, doctor;
 
-    public Prescription(String medication, String code, String date, String quantity, String doctor) {
+    public Prescription(String medication, String note, String date, String quantity, String doctor) {
         this.medication = medication;
-        this.code = code;
+        this.note = note;
         this.date = date;
         this.quantity = quantity;
         this.doctor = doctor;
@@ -19,12 +19,12 @@ public class Prescription {
         this.medication = medication;
     }
 
-    public String getCode() {
-        return code;
+    public String getNote() {
+        return note;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getQuantity() {

@@ -1,11 +1,13 @@
 package com.robert.sci4202.recyclerviews;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.robert.sci4202.R;
 import com.robert.sci4202.objects.Note;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -18,12 +20,17 @@ public class NotesRecyclerviewAdapter
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+       View view = LayoutInflater.from(parent.getContext())
+               .inflate(R.layout.note_list_item, parent, false);
+
+       return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        holder.txtContent.setText(notes.get(position).getNotes());
+        holder.txtAuthor.setText(notes.get(position).getAuthor());
+        holder.txtDate.setText(notes.get(position).getDate());
     }
 
 
@@ -38,8 +45,12 @@ public class NotesRecyclerviewAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        TextView txtDate, txtAuthor, txtContent;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            txtDate = itemView.findViewById(R.id.txtDateRecorded);
+            txtAuthor = itemView.findViewById(R.id.txtNoteAuthor);
+            txtContent = itemView.findViewById(R.id.txtNoteText);
         }
     }
 }

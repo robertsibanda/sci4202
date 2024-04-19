@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_home"
+        android:title="Home"
+        android:icon="@drawable/home_1_svgrepo_com"
+        />
+
+    <item
+        android:id="@+id/bottom_calender"
+        android:title="Calender"
+        android:icon="@drawable/calendar_svgrepo_com"
+        />
+
+
+    <item
+        android:id="@+id/bottom_settings"
+        android:title="Settings"
+        android:icon="@drawable/settings_svgrepo_com"
+        />
+
+</menu>

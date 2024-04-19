@@ -8,18 +8,14 @@
     tools:context=".SettingsFragment">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
+        android:id="@+id/btnBack"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
-        app:layout_constraintBottom_toTopOf="@id/personalInfoBottomGuide"
+        app:layout_constraintBottom_toTopOf="@id/backBottomGuide"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintRight_toLeftOf="@id/backRightGuide"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lbl1"
@@ -31,6 +27,31 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/txtPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Robert Sibanda (M , 25 years old)"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerImageGuide" />
+
+    <TextView
+        android:id="@+id/txtPersonContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="robertsibanda20@gmail.com"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPersonName" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -96,88 +117,41 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.2" />
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/robert"
-        app:layout_constraintBottom_toTopOf="@id/headerImageGuide"
-        app:layout_constraintLeft_toRightOf="@id/imageLeftGuide"
-        app:layout_constraintRight_toLeftOf="@id/imageRightGuide"
-        app:layout_constraintTop_toBottomOf="@id/lbl1"
-        app:riv_corner_radius="20dp" />
-
-    <ImageView
-        android:id="@+id/btnBack"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/backRightGuide"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/backBottomGuide"
-        />
-
-    <TextView
-        android:id="@+id/txtPersonName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/headerImageGuide"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="Robert Sibanda (M , 25 years old)"
-        android:textStyle="bold"
-        android:textSize="15dp"
-        android:layout_marginTop="3dp" />
-
-    <TextView
-        android:id="@+id/txtPersonEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="robertsibanda20@gmail.com"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtPersonName" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnPermissions"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:padding="5dp"
-        android:drawableLeft="@drawable/shield_user_svgrepo_com"
-        android:text="Permission"
+        android:layout_marginStart="40dp"
+        android:text="Delete Account"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/navBarBottomGuide"
-        app:layout_constraintEnd_toStartOf="@+id/btnAccount"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/personalInfoBottomGuide" />
-
+        app:layout_constraintTop_toBottomOf="@id/personalInfoBottomGuide"
+        app:layout_constraintVertical_bias="0.437" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnAccount"
+        android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:padding="5dp"
-        android:drawableLeft="@drawable/password_svgrepo_com"
-        android:text="Security"
+        android:text="Logout"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/navBarBottomGuide"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.681"
         app:layout_constraintStart_toEndOf="@+id/btnPermissions"
-        app:layout_constraintTop_toBottomOf="@id/personalInfoBottomGuide" />
+        app:layout_constraintTop_toBottomOf="@id/personalInfoBottomGuide"
+        app:layout_constraintVertical_bias="0.437" />
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navSettingsFragment"
+    <com.makeramen.roundedimageview.RoundedImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navBarBottomGuide"
-        app:layout_constraintBottom_toTopOf="@id/maxBottomGuide"
-        />
+        android:layout_marginTop="10dp"
+        android:src="@drawable/user_rounded_svgrepo_com"
+        app:layout_constraintBottom_toTopOf="@id/headerImageGuide"
+        app:layout_constraintLeft_toRightOf="@id/imageLeftGuide"
+        app:layout_constraintRight_toLeftOf="@id/imageRightGuide"
+        app:layout_constraintTop_toBottomOf="@id/lbl1"
+        app:riv_corner_radius="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
