@@ -2,7 +2,6 @@ package com.robert.sci4202.data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_data")
@@ -12,20 +11,47 @@ public class UserData {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    @ColumnInfo(name = "access_token")
-    public String accessToken;
+    @ColumnInfo(name = "user_id")
+    public String userID;
 
-    @ColumnInfo(name = "refresh_token")
-    public String refreshToken;
+    @ColumnInfo(name = "password")
+    public String password;
 
     @ColumnInfo(name = "user_name")
     public String userName;
 
+    @ColumnInfo(name = "contact")
+    public String contact;
+
     @ColumnInfo(name = "full_name")
     public String fullName;
 
+    @ColumnInfo(name = "gender")
+    public String gender;
+
+    @ColumnInfo(name = "access_token")
+    public String accessToken;
+
     @ColumnInfo(name = "user_type")
     public String userType;
+
+    @ColumnInfo(name = "private_key")
+    public String privateKey;
+
+    @ColumnInfo(name = "public_key_modulus")
+    public String publicKeyModulus;
+
+    @ColumnInfo(name = "public_key_exponent")
+    public String publicKeyExponent;
+
+    @ColumnInfo(name = "private_key_modulus")
+    public String privateKeyModulus;
+
+    @ColumnInfo(name = "private_key_exponent")
+    public String privateKeyExponent;
+
+    @ColumnInfo(name = "public_key")
+    public String publicKey;
 
 
 }

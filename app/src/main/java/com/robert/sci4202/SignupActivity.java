@@ -3,17 +3,19 @@ package com.robert.sci4202;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
+import com.robert.sci4202.security.Keys;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,75 +27,81 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Security.addProvider(new BouncyCastleProvider());
+
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Insets systemBars =
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top,
+                    systemBars.right, systemBars.bottom);
             return insets;
         });
+        UserDatabase userDatabase =
+                UserDatabase.getINSTANCE(this.getApplicationContext());
 
-        EditText etUsername, etPassword, etFullName, etContact;
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        etContact  = findViewById(R.id.etEmail);
-        etFullName = findViewById(R.id.etFullName);
-        UserDatabase userDatabase = UserDatabase.getINSTANCE(this.getApplicationContext());
         userDatabase.userDataDAO().deleteAll();
-        JSONObject signupParams = new JSONObject();
-        try {
-            signupParams.put("username", etUsername.getText());
-            signupParams.put("password", etPassword.getText());
-            signupParams.put("contact", etContact.getText());
-            signupParams.put("fullName", etFullName.getText());
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getApplicationContext());
-
-        String url = getString(R.string.endpoint) + "auth/signup";
 
         findViewById(R.id.btnNext).setOnClickListener(l -> {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    signupParams,
-                    response -> {
-                        try {
-                            response.get("success");
-                            Intent intent = new Intent(this, SignupCompleteActivity.class);
-                            intent.putExtra("token", (String) response.get("access"));
+            Keys keys = new Keys();
+            try {
+                keys.generateKeys();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            PublicKey publicKey = keys.publicKey;
+            PrivateKey privateKey = keys.privateKey;
 
-                            UserData userData = new  UserData();
-                            userData.userName = String.valueOf(etUsername.getText());
-                            userData.userType = "unknown";
-                            userData.accessToken = (String) response.get("access");
-                            userData.refreshToken = (String) response.get("refresh");
-                            userData.fullName = String.valueOf(etFullName.getText());
+            String pem = Keys.convertPEM(publicKey);
 
-                            userDatabase.userDataDAO().addUserData(userData);
-                            startActivity(intent);
-                        }catch (Exception ex) {
-                            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            try {
-                                Toast.makeText(this, response.getString("error"), Toast.LENGTH_SHORT).show();
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            ;
-                            System.out.println(ex.getMessage());
-                        }
-                    },
-                    error -> {
-                        System.out.println(error.getMessage());
-                        Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+            System.out.println("Public key : " + publicKey);
+            System.out.println("Created public key : " + pem);
 
-            requestQueue.add(jsonObjectRequest);
+            EditText etUsername, etPassword, etFullName, etContact;
+            etUsername = findViewById(R.id.etUsername);
+            etPassword = findViewById(R.id.etPassword);
+            etFullName = findViewById(R.id.etFullName);
+            etContact = findViewById(R.id.etEmail);
+
+
+            try {
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                String fullname = etFullName.getText().toString();
+                String contact = etContact.getText().toString();
+
+                UserData userData = new UserData();
+                userData.userName = username;
+                userData.fullName = fullname;
+                userData.password = password;
+                userData.contact = contact;
+                userData.privateKey = Keys.convertPEM(privateKey);
+                userData.publicKey = Keys.convertPEM(publicKey);
+
+                RSAPublicKey pubkey = (RSAPublicKey) publicKey;
+                userData.publicKeyExponent =
+                        String.valueOf(pubkey.getPublicExponent());
+                userData.publicKeyModulus =
+                        String.valueOf(pubkey.getModulus());
+
+                RSAPrivateKey privkey = (RSAPrivateKey) privateKey;
+                userData.privateKeyExponent =
+                        String.valueOf(privkey.getPrivateExponent());
+                userData.privateKeyModulus =
+                        String.valueOf(privkey.getModulus());
+
+                userDatabase.userDataDAO().addUserData(userData);
+                startActivity(new Intent(this,
+                        SignupCompleteActivity.class));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
         });
-
 
     }
 }

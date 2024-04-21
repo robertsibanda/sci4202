@@ -16,7 +16,7 @@ public class ServerResult {
     public JSONObject getResult() throws JSONException {
         System.out.println("response : " + result.getResult());
 
-        JSONObject jsonObject = new JSONObject("result");
+        JSONObject jsonObject = new JSONObject(result.toString());
         JSONObject object = new JSONObject(jsonObject.getString("result"));
         return object.getJSONObject("result");
     }

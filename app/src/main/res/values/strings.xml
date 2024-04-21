@@ -2,7 +2,14 @@
     <string name="app_name">sci4202</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="endpoint">http://10.100.17.130:3000/ehr/v1/</string>
+    <string name="endpoint">http://192.168.1.240:5005</string>
+    <string name="node_2">http://10.100.17.130:3000/ehr/v1/</string>
+    <string name="node_3">http://10.100.17.130:3000/ehr/v1/</string>
+
+    <string name="rpc_signup">signup</string>
+    <string name="rpc_update_permissions">update_data_permissions</string>
+    <string name="rpc_view_records">get_records</string>
+    <string name="rpc_update_records">update_records</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
