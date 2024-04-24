@@ -97,6 +97,8 @@ public class SignupActivity extends AppCompatActivity {
                 userDatabase.userDataDAO().addUserData(userData);
                 startActivity(new Intent(this,
                         SignupCompleteActivity.class));
+
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

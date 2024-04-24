@@ -3,23 +3,20 @@ package com.robert.sci4202.recyclerviews;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.robert.sci4202.R;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
+import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.MyDoctorItem;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,90 +45,76 @@ public class MyDoctorRecyclerviewAdapter
     public void onBindViewHolder(@NonNull ViewHolder holder,
                                  int position) {
         UserDatabase userDatabase =
-                UserDatabase.getINSTANCE(holder.btnAddDoc.getContext());
+                UserDatabase.getINSTANCE(holder.checkView.getContext());
+
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
+
         holder.txtDocName.setText(myDoctorItems.get(position).getName());
-        holder.txtDocHosp.setText(myDoctorItems.get(position).getHospital());
+        holder.txtDocHosp.setText(myDoctorItems.get(position).getOrganisation());
         holder.txtDocPractice.setText(myDoctorItems.get(position).getProfession());
-        holder.approver = myDoctorItems.get(position).getAprover();
+        holder.txtDocContact.setText(myDoctorItems.get(position).getContact());
+        holder.checkView.setChecked(myDoctorItems.get(position).isCanView());
+        holder.checkUpdate.setChecked(myDoctorItems.get(position).isCanUpdate());
+        holder.doctor = myDoctorItems.get(position).getUserId();
 
-        if (buttons == false) {
-            holder.btnAddDoc.setVisibility(View.INVISIBLE);
-            holder.btnAddDoc.setVisibility(View.GONE);
-            holder.btnReject.setVisibility(View.INVISIBLE);
-            holder.btnReject.setVisibility(View.GONE);
-        }
-
-        System.out.println("Fragment  : " + frag);
-
-        if (Objects.equals(frag, "care")) {
-            holder.btnAddDoc.setVisibility(View.INVISIBLE);
-            holder.btnAddDoc.setVisibility(View.GONE);
-        } else if (myDoctorItems.get(position).isApproved()) {
-            holder.btnAddDoc.setText("View");
-            holder.btnAddDoc.setVisibility(View.INVISIBLE);
-            holder.btnAddDoc.setVisibility(View.GONE);
-        } else if (myDoctorItems.get(position).isRequested() & !myDoctorItems.get(position).isApproved()) {
-
-
-            if (Objects.equals(userDatabase.userDataDAO().getAllUserData().get(0).userName, holder.approver)) {
-                holder.btnAddDoc.setText("Approve");
-            } else {
-                holder.btnAddDoc.setText("Pending");
-
-                holder.btnAddDoc.setClickable(false);
-            }
-        } else {
-            holder.btnAddDoc.setOnClickListener(l -> {
-
-
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(holder.btnAddDoc.getContext());
-                JSONObject params = new JSONObject();
+        holder.checkUpdate.setOnCheckedChangeListener((compoundButton,
+                                                       b) -> {
+            //TODO handle update permissions
+            new Thread(() -> {
+                Map<String, Object> params = new HashMap<>();
                 try {
-                    params.put("authorization",
-                            "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                    params.put("doctor",
-                            myDoctorItems.get(position).getUsername());
-                } catch (JSONException e) {
+                    params.put("userid", userData.userID);
+                    params.put("perm", "update");
+                    params.put("perm-code", b);
+                    params.put("doctor", holder.doctor);
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "update_data_permissions",
+                            params);
+                    result.getResult().get("success");
+                    System.out.println("Result from update :" + result.getResult());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
 
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url + "patient/add-doc",
-                                params,
-                                response -> {
-                                    try {
-                                        response.get("success");
-                                        Toast.makeText(holder.btnAddDoc.getContext(), "Request submitted", Toast.LENGTH_SHORT).show();
-                                        holder.btnAddDoc.setText(
-                                                "Pending");
-                                    } catch (JSONException e) {
-                                        try {
-                                            Toast.makeText(holder.btnAddDoc.getContext(), response.get("error").toString(),
-                                                    Toast.LENGTH_SHORT).show();
-                                            System.out.println("Error " +
-                                                    "from " +
-                                                    "server: " + response.get(
-                                                    "error"));
-                                        } catch (JSONException ex) {
-                                            System.out.println("Error in" +
-                                                    " client:" +
-                                                    " " + ex.getMessage());
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    System.out.println("Error from " +
-                                            "server and " +
-                                            "client: " + error.getMessage());
-                                });
+            }).start();
+        });
 
-                requestQueue.add(jsonObjectRequest);
-            });
-        }
+
+        holder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton,
+                                         boolean b) {
+                //TODO handle view permissions
+                new Thread(() -> {
+                    Map<String, Object> params = new HashMap<>();
+                    try {
+                        params.put("userid", userData.userID);
+                        params.put("perm", "view");
+                        params.put("perm-code", b);
+                        params.put("doctor", holder.doctor);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "update_data_permissions",
+                                params);
+                        result.getResult().get("success");
+                        System.out.println("Result from view :" + result.getResult());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }).start();
+            }
+        });
 
     }
 
@@ -147,8 +130,8 @@ public class MyDoctorRecyclerviewAdapter
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtDocName, txtDocContact, txtDocHosp, txtDocPractice;
-        Button btnAddDoc, btnReject;
-        String approver;
+        CheckBox checkView, checkUpdate;
+        String doctor;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -156,8 +139,8 @@ public class MyDoctorRecyclerviewAdapter
             txtDocContact = itemView.findViewById(R.id.txtDocContact);
             txtDocHosp = itemView.findViewById(R.id.txtDocHospital);
             txtDocPractice = itemView.findViewById(R.id.txtDocPractice);
-            btnAddDoc = itemView.findViewById(R.id.btnAddDoc);
-            btnReject = itemView.findViewById(R.id.btnReject);
+            checkUpdate = itemView.findViewById(R.id.checkUpdate);
+            checkView = itemView.findViewById(R.id.checkView);
         }
     }
 }

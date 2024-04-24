@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
-
-import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
@@ -44,9 +43,15 @@ public class SettingsFragment extends Fragment {
 
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(view.getContext());
-        List<UserData> userData =
-                userDatabase.userDataDAO().getAllUserData();
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
 
+        TextView txtPersonName = view.findViewById(R.id.txtPersonName);
+        TextView txtPersonContact =
+                view.findViewById(R.id.txtPersonContact);
+
+        txtPersonName.setText(userData.fullName);
+        txtPersonContact.setText(userData.contact);
 
         view.findViewById(R.id.btnPermissions).setOnClickListener(l -> {
             //TODO Delete Account

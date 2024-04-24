@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="doc@hospital.com"
+        android:text="doc@organisation.com"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.5"
@@ -83,33 +83,33 @@
         app:dividerColor="@color/lavender"
         app:layout_constraintLeft_toRightOf="@id/imgDocImage" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnAddDoc"
+    <CheckBox
+        android:id="@+id/checkUpdate"
         android:layout_width="90dp"
         android:layout_height="40dp"
         android:layout_margin="3dp"
         android:layout_marginBottom="12sp"
-        android:text="AddDoctor"
+        android:text="Update"
         android:textSize="12sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/leftGuide" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnReject"
+    <CheckBox
+        android:id="@+id/checkView"
         android:layout_width="90dp"
         android:layout_height="40dp"
         android:layout_margin="3dp"
         android:layout_marginBottom="12sp"
         android:backgroundTint="#EC5252"
-        android:text="Delete"
+        android:text="View"
         android:textSize="12sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/btnAddDoc" />
+        app:layout_constraintLeft_toRightOf="@id/checkUpdate" />
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imgDocImage"

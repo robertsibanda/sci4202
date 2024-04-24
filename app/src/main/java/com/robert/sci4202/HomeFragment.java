@@ -7,35 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.MyDoctorItem;
 import com.robert.sci4202.objects.Patient;
 import com.robert.sci4202.recyclerviews.MyDoctorRecyclerviewAdapter;
-import com.robert.sci4202.recyclerviews.PatientRecyclerviewAdapter;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
 
@@ -71,7 +65,7 @@ public class HomeFragment extends Fragment {
         UserData userData =
                 userDatabase.userDataDAO().getAllUserData().get(0);
 
-        System.out.println("Private Key: " + userData.publicKeyModulus);
+        System.out.println("Private Key: " + userData.userID);
         System.out.println("Public Key: " + userData.publicKeyExponent);
 
         String fullName = userData.fullName;
@@ -97,7 +91,7 @@ public class HomeFragment extends Fragment {
                 .load(getString(R.string.endpoint) + "image/user/" +
                 userData.get(0).userName) //TODO fix this in backed code
                 .into(roundedImageView);
-*/
+                */
 
         RecyclerView recyclerView = view.findViewById(R.id.recviewHome);
         etSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -120,187 +114,108 @@ public class HomeFragment extends Fragment {
                     search_type = "doctor";
                 }
 
-                JSONObject params = new JSONObject();
+                Map<String, String> params = new HashMap<>();
                 try {
                     params.put("search_string", search_string);
                     params.put("user_type", search_type);
-                    params.put("authorization",
-                            "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                } catch (JSONException e) {
+                    params.put("signed", "signed");
+                    params.put("userid", userData.userID);
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(view.getContext());
-                String url = getString(R.string.endpoint) + "basic/search";
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url,
-                                params,
-                                response -> {
-                                    if (userDatabase.userDataDAO().getAllUserData().get(0).userType.equals("patient")) {
-                                        try {
-                                            JSONArray people =
-                                                    response.getJSONArray(
-                                                            "people");
-                                            ArrayList<MyDoctorItem> myDoctorItems = new ArrayList<>();
+                String finalSearch_type = search_type;
+                MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter
+                        = new MyDoctorRecyclerviewAdapter();
 
-                                            for (int num = 0; num < people.length(); num++) {
-                                                JSONObject person =
-                                                        people.getJSONObject(num);
-                                                String name =
-                                                        person.getString(
-                                                                "name");
-                                                String hospital =
-                                                        person.getString(
-                                                                "hospital");
-                                                String work =
-                                                        person.getString(
-                                                                "work");
-                                                String username =
-                                                        person.getString(
-                                                                "username");
-                                                String approver =
-                                                        person.getString(
-                                                                "approver");
-                                                boolean approved =
-                                                        person.getBoolean(
-                                                                "approved");
-                                                boolean requested =
-                                                        person.getBoolean(
-                                                                "requested");
+                new Thread(() -> {
+                    try {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "search_person",
+                                params);
+                        System.out.println("Result : " + result.getResult());
+                        try {
+                            result.getResult().get("success");
+                        } catch (Exception ex) {
+                            try {
+                                Toast.makeText(view.getContext(),
+                                        result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(view.getContext(),
+                                        e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        System.out.println(result.getResult());
+                        JSONArray people =
+                                result.getResult().getJSONArray("success");
+                        if (finalSearch_type.equals("doctor")) {
+                            //TODO create doctor recyclerview
+                            ArrayList<MyDoctorItem> myDoctorItems =
+                                    new ArrayList<>();
+                            for (int num = 0; num < people.length(); num++) {
+                                JSONObject person =
+                                        people.getJSONObject(num);
+                                String fullname = person.getString(
+                                        "fullname");
+                                String contact = person.getString(
+                                        "contact");
 
-                                                myDoctorItems.add(new MyDoctorItem
-                                                        (name, "", "",
-                                                                work,
-                                                                hospital,
-                                                                username,
-                                                                approver,
-                                                                requested,
-                                                                approved));
-                                            }
+                                String organistion = person.getString(
+                                        "organisation");
+                                boolean canView = person.getBoolean(
+                                        "view");
+                                boolean canUpdate = person.getBoolean(
+                                        "update");
 
+                                String occupation = person.getString(
+                                        "occupation");
 
-                                            MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
-                                                    new MyDoctorRecyclerviewAdapter();
+                                String userid = person.getString("userid");
 
-                                            myDoctorRecyclerviewAdapter.url =
-                                                    getString(R.string.endpoint);
-                                            myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
-                                            recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
-                                            System.out.println("People " +
-                                                    "from " +
-                                                    "server  : " + people);
-                                        } catch (JSONException e) {
-                                            System.out.println("Error at" +
-                                                    " search " +
-                                                    ": " + e.getMessage());
-                                            try {
-                                                System.out.println(
-                                                        "Error from " +
-                                                                "server " +
-                                                                ": " + response.get("error"));
-                                            } catch (JSONException ex) {
-                                                System.out.println(
-                                                        "Error at " +
-                                                                "search " +
-                                                                "2: " + ex.getMessage());
-                                            }
-                                        }
-                                    } else {
-                                        try {
-                                            System.out.println("Response" +
-                                                    " from " +
-                                                    "server " + response);
-                                            JSONArray people =
-                                                    response.getJSONArray(
-                                                            "people");
-                                            ArrayList<Patient> patients =
-                                                    new ArrayList<>();
+                                myDoctorItems.add(new MyDoctorItem(fullname, "", contact, occupation, organistion, userid, canView, canUpdate));
+                            }
 
-                                            for (int num = 0; num < people.length(); num++) {
-                                                JSONObject person =
-                                                        people.getJSONObject(num);
-                                                String name =
-                                                        person.getString(
-                                                                "name");
-                                                String contact = "contact";
-                                                String username =
-                                                        person.getString(
-                                                                "username");
-                                                String approver =
-                                                        person.getString(
-                                                                "approver");
-                                                boolean approved =
-                                                        person.getBoolean(
-                                                                "approved");
-                                                boolean requested =
-                                                        person.getBoolean(
-                                                                "requested");
-
-                                                patients.add(new Patient("",
-                                                        contact,
-                                                        username, name,
-                                                        approver,
-                                                        requested,
-                                                        approved));
-                                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    //Do something on UiThread
+                                    myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
+                                    recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
+                                }
+                            });
 
 
-                                            PatientRecyclerviewAdapter patientRecyclerviewAdapter =
-                                                    new PatientRecyclerviewAdapter(view.getContext(), getParentFragmentManager());
+                        } else {
+                            ArrayList<Patient> patients =
+                                    new ArrayList<>();
+                            for (int num = 0; num < people.length(); num++) {
+                                JSONObject patient =
+                                        people.getJSONObject(num);
+                                String fullname = patient.getString(
+                                        "fullname");
+                                String contact = patient.getString(
+                                        "contact");
+                                String userid = patient.getString(
+                                        "userid");
+                                //patients.add(new Patient())
 
-                                            patientRecyclerviewAdapter.url =
-                                                    getString(R.string.endpoint);
-                                            patientRecyclerviewAdapter.setPatients(patients);
-                                            recyclerView.setAdapter(patientRecyclerviewAdapter);
-                                            System.out.println("People " +
-                                                    "from " +
-                                                    "server  : " + people);
-                                        } catch (JSONException e) {
-                                            System.out.println("Error at" +
-                                                    " search " +
-                                                    ": " + e.getMessage());
-                                            try {
-                                                System.out.println(
-                                                        "Error from " +
-                                                                "server " +
-                                                                ": " + response.get("error"));
-                                            } catch (JSONException ex) {
-                                                System.out.println(
-                                                        "Error at " +
-                                                                "search " +
-                                                                "2: " + ex.getMessage());
-                                            }
-                                        }
-                                    }
+                            }
 
+                        }
 
-                                },
-                                error -> {
-                                    System.out.println("Error : " + error.getMessage());
-                                });
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
 
-
-                requestQueue.add(jsonObjectRequest);
                 return true;
             }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
+        //TODO get user notifications and messages
 
-        RequestQueue requestQueue =
-                Volley.newRequestQueue(view.getContext());
-
-        JSONObject notifiParams = new JSONObject();
-        try {
-            notifiParams.put("authorization",
-                    "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
         return view;
     }
 }

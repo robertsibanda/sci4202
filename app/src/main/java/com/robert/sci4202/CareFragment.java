@@ -5,11 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.Allege;
@@ -28,7 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,8 +68,8 @@ public class CareFragment extends Fragment {
 
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(view.getContext());
-        List<UserData> userData =
-                userDatabase.userDataDAO().getAllUserData();
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
 
 
         RecyclerView recyclerView =
@@ -226,74 +230,75 @@ public class CareFragment extends Fragment {
             // show patient doctors
 
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-            MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
-                    new MyDoctorRecyclerviewAdapter();
+            new Thread(() -> {
 
-            myDoctorRecyclerviewAdapter.frag = "care";
+                Map<String, String> params = new HashMap<>();
 
-            ArrayList<MyDoctorItem> myDoctorItems = new ArrayList<>();
+                params.put("userid", userData.userID);
 
+                MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
+                        new MyDoctorRecyclerviewAdapter();
 
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(view.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("category", "doctors");
-                params.put("value", "0");
+                myDoctorRecyclerviewAdapter.frag = "care";
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+                ArrayList<MyDoctorItem> myDoctorItems = new ArrayList<>();
 
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "patient/view",
-                    params,
-                    response -> {
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "get_my_doctors",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
                         try {
-                            response.get("doctors");
-                            JSONArray people = response.getJSONArray(
-                                    "doctors");
-                            System.out.println("My Doctors : " + people);
-                            for (int num = 0; num < people.length(); num++) {
-                                JSONObject person =
-                                        people.getJSONObject(num);
-                                String name = person.getString("name");
-                                String hospital = person.getString(
-                                        "hospital");
-                                String work = person.getString("work");
-                                String username = person.getString(
-                                        "username");
-                                String approver = null;
-                                boolean approved = false;
-                                boolean requested = false;
-
-                                myDoctorItems.add(new MyDoctorItem
-                                        (name, "", "", work, hospital,
-                                                username, approver,
-                                                requested, approved));
-                            }
-                            myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
-                            System.out.println("MY doctor items : " + myDoctorItems);
-                            recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
-
-                        } catch (JSONException e) {
-                            try {
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
-                    });
+                    }
+                    System.out.println(result.getResult());
+                    JSONArray people =
+                            result.getResult().getJSONArray("success");
+                    for (int num = 0; num < people.length(); num++) {
+                        JSONObject person =
+                                people.getJSONObject(num);
+                        String fullname = person.getString(
+                                "fullname");
+                        String contact = person.getString(
+                                "contact");
 
-            requestQueue.add(jsonObjectRequest);
+                        String organistion = person.getString(
+                                "organisation");
+                        boolean canView = person.getBoolean(
+                                "view");
+                        boolean canUpdate = person.getBoolean(
+                                "update");
+
+                        String occupation = person.getString(
+                                "occupation");
+
+                        String userid = person.getString("userid");
+
+                        myDoctorItems.add(new MyDoctorItem(fullname, "",
+                                contact, occupation, organistion, userid
+                                , canView, canUpdate));
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
+                            recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
+                        }
+                    });
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
+
 
         });
 

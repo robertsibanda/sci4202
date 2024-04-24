@@ -2,19 +2,28 @@ package com.robert.sci4202.objects;
 
 public class MyDoctorItem {
 
-    private String name, imageUrl, contact, profession, hospital, username, aprover;
-    private boolean requested, approved;
+    private String name;
+    private String imageUrl;
 
-    public MyDoctorItem(String name, String imageUrl, String contact, String profession, String hospital, String username, String aprover, boolean requested, boolean approved) {
+    private String contact;
+    private String profession;
+    private String organisation;
+    private String userId;
+    private boolean canView, canUpdate;
+
+    public MyDoctorItem(String name, String imageUrl, String contact,
+                        String profession, String hospital,
+                        String userId,
+                        boolean canView, boolean canUpdate) {
+
         this.name = name;
         this.imageUrl = imageUrl;
         this.contact = contact;
         this.profession = profession;
-        this.hospital = hospital;
-        this.username = username;
-        this.aprover = aprover;
-        this.requested = requested;
-        this.approved = approved;
+        this.organisation = hospital;
+        this.userId = userId;
+        this.canView = canView;
+        this.canUpdate = canUpdate;
     }
 
     public String getName() {
@@ -49,43 +58,36 @@ public class MyDoctorItem {
         this.contact = contact;
     }
 
-    public String getHospital() {
-        return hospital;
+    public String getOrganisation() {
+        return organisation;
     }
 
-    public void setHospital(String hospital) {
-        this.hospital = hospital;
+    public void setOrganisation(String organisation) {
+        this.organisation = organisation;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public boolean isApproved() {
-        return approved;
+    public boolean isCanUpdate() {
+        return canUpdate;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setCanUpdate(boolean canUpdate) {
+        this.canUpdate = canUpdate;
     }
 
-    public boolean isRequested() {
-        return requested;
+    public boolean isCanView() {
+        return canView;
     }
 
-    public void setRequested(boolean requested) {
-        this.requested = requested;
+    public void setCanView(boolean canView) {
+        this.canView = canView;
     }
 
-    public String getAprover() {
-        return aprover;
-    }
-
-    public void setAprover(String aprover) {
-        this.aprover = aprover;
-    }
 }

@@ -70,38 +70,49 @@ public class SignupCompleteActivity extends AppCompatActivity {
         next.setOnClickListener(l -> {
             //TODO generate keys then send data to blockchain to create
             // an account
-            new Thread(() -> {
-                Map<String, String> params = new HashMap<>();
-                params.put("fullname", userData.fullName);
-                params.put("contact", userData.contact);
-                params.put("usertype", userData.userType);
-                params.put("public_key", userData.publicKey);
-                params.put("gender", userData.gender);
-                String url = "http://192.168.1.240:5005";
 
-                try {
-                    ServerResult result = RPCRequests.sendRequest("signup",
-                            params,
-                            url);
+            userDatabase.userDataDAO().updateUserData(userData);
+
+            if (userData.userType.equals("doctor")) {
+                startActivity(new Intent(this,
+                        SignupDoctorCompleteActivity.class));
+            } else {
+                new Thread(() -> {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("fullname", userData.fullName);
+                    params.put("contact", userData.contact);
+                    params.put("usertype", userData.userType);
+                    params.put("public_key", userData.publicKey);
+                    params.put("gender", userData.gender);
+                    String url = "http://192.168.1.240:5005";
+
                     try {
-                        result.getResult().get("success");
-                    } catch (Exception ex) {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "signup",
+                                params);
                         try {
-                            Toast.makeText(this.getApplicationContext(),
-                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Toast.makeText(this, e.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                            String userid =
+                                    result.getResult().get("success").toString();
+                            userData.userID = userid;
+                            userDatabase.userDataDAO().updateUserData(userData);
+                        } catch (Exception ex) {
+                            try {
+                                Toast.makeText(this.getApplicationContext(),
+                                        result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(this, e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
+                        System.out.println(result.getResult());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
-                    System.out.println(result.getResult());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
 
-                userDatabase.userDataDAO().updateUserData(userData);
-                startActivity(new Intent(this, LoginActivity.class));
-            }).start();
+                    startActivity(new Intent(this, LoginActivity.class));
+                }).start();
+            }
+
         });
     }
 }

@@ -337,7 +337,7 @@ public class PatientInforFragment extends Fragment {
                                     myDoctorItems.add(new MyDoctorItem
                                             (name, "", "", work,
                                                     hospital, username,
-                                                    approver, requested,
+                                                    requested,
                                                     approved));
                                 }
 

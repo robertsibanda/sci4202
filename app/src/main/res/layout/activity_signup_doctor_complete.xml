@@ -30,13 +30,12 @@
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:drawableStart="@drawable/hospital_svgrepo_com"
-        android:hint="hoapital"
+        android:hint="organisation"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/btnNextSignup1"
+        app:layout_constraintBottom_toTopOf="@+id/btnCompeteSignup"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        app:layout_constraintRight_toLeftOf="@id/rightGuide"
-        app:layout_constraintTop_toBottomOf="@+id/etFullName" />
+        app:layout_constraintRight_toLeftOf="@id/rightGuide" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -58,7 +57,6 @@
         android:textColor="#181345"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/etFullName"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
         app:layout_constraintRight_toLeftOf="@id/rightGuide"
@@ -103,7 +101,7 @@
         app:layout_constraintGuide_percent="0.7" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnNextSignup1"
+        android:id="@+id/btnCompeteSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

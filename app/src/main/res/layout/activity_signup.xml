@@ -14,7 +14,7 @@
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:drawableStart="@drawable/user_rounded_svgrepo_com"
-        android:hint="username"
+        android:hint="userId"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintHorizontal_bias="0.5"

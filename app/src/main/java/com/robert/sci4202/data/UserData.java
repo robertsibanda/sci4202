@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "user_data")
 public class UserData {
 
+    // personal account details
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -52,6 +53,13 @@ public class UserData {
 
     @ColumnInfo(name = "public_key")
     public String publicKey;
+
+    //details for the user if he/she is a doctor
+    @ColumnInfo(name = "organisation")
+    public String organisation;
+
+    @ColumnInfo(name = "occupation")
+    public String occupation;
 
 
 }
