@@ -6,19 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.robert.sci4202.DoctorPatientCareFragment;
 import com.robert.sci4202.R;
 import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.Patient;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -60,186 +52,36 @@ public class PatientRecyclerviewAdapter extends RecyclerView.Adapter<PatientRecy
                                  int position) {
         holder.txtPatientName.setText(patients.get(position).getFullName());
         holder.txtPatientContact.setText(patients.get(position).getContact());
-        holder.approver = patients.get(position).getApprover();
+
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(holder.btnAddPatient.getContext());
 
-        if (patients.get(position).getApproved()) {
+        if (patients.get(position).getCanView() | patients.get(position).getCanUpdate()) {
             holder.btnAddPatient.setText("View");
 
-        } else if (patients.get(position).getRequested() & !patients.get(position).getApproved()) {
-            if (userDatabase.userDataDAO().getAllUserData().get(0).userName.equals(holder.approver)) {
-                holder.btnAddPatient.setText("Approve");
-            } else {
-                holder.btnAddPatient.setText("Pending");
-                holder.btnAddPatient.setClickable(false);
-            }
+        } else {
+            holder.btnAddPatient.setText("Request");
         }
 
 
         holder.btnAddPatient.setOnClickListener(l -> {
-            if (holder.btnAddPatient.getText() == "Approve") {
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(holder.btnAddPatient.getContext());
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("authorization",
-                            "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                    params.put("other",
-                            patients.get(position).getUsername());
-                    params.put("category", "relation");
-                    params.put("approval", "1");
+            if (holder.btnAddPatient.getText() == "Request") {
+                // TODO make a request to the patient to view their
+                //  information
 
-
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url + "doctor/approve",
-                                params,
-                                response -> {
-                                    try {
-                                        response.get("success");
-                                        Toast.makeText(holder.btnAddPatient.getContext(), "Request submitted", Toast.LENGTH_SHORT).show();
-                                        holder.btnAddPatient.setText(
-                                                "View");
-                                        holder.btnAddPatient.setClickable(false);
-                                        holder.btnAddPatient.setClickable(false);
-                                    } catch (JSONException e) {
-                                        try {
-                                            System.out.println("Error " +
-                                                    "from " +
-                                                    "server: " + response.get(
-                                                    "error"));
-                                        } catch (JSONException ex) {
-                                            try {
-                                                Toast.makeText(holder.btnAddPatient.getContext(), response.get("error").toString(),
-                                                        Toast.LENGTH_SHORT).show();
-                                            } catch (JSONException exc) {
-                                                throw new RuntimeException(exc);
-                                            }
-                                            System.out.println("Error in" +
-                                                    " client:" +
-                                                    " " + ex.getMessage());
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    System.out.println("Error from " +
-                                            "server and " +
-                                            "client: " + error.getMessage());
-                                });
-
-                requestQueue.add(jsonObjectRequest);
             } else if (holder.btnAddPatient.getText().equals("View")) {
-                System.out.println("Viewing Patient");
                 DoctorPatientCareFragment careFragment =
                         new DoctorPatientCareFragment();
+                careFragment.fullname =
+                        patients.get(position).getFullName();
+                careFragment.contact = patients.get(position).getContact();
                 careFragment.patientID =
                         patients.get(position).getUsername();
                 fragmentManager.beginTransaction()
                         .replace(R.id.navHostFragment,
                                 careFragment)
                         .commit();
-
-            } else if (holder.btnAddPatient.getText().toString().contains("Add")) {
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(holder.btnAddPatient.getContext());
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("authorization",
-                            "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                    params.put("patient",
-                            patients.get(position).getUsername());
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url + "doctor/add-patient",
-                                params,
-                                response -> {
-                                    try {
-                                        response.get("success");
-                                        Toast.makeText(holder.btnAddPatient.getContext(), "Request submitted", Toast.LENGTH_SHORT).show();
-                                        holder.btnAddPatient.setText(
-                                                "Pending");
-                                        holder.btnAddPatient.setClickable(false);
-                                    } catch (JSONException e) {
-                                        try {
-                                            Toast.makeText(holder.btnAddPatient.getContext(), response.get("error").toString(),
-                                                    Toast.LENGTH_SHORT).show();
-                                            System.out.println("Error " +
-                                                    "from " +
-                                                    "server: " + response.get(
-                                                    "error"));
-                                        } catch (JSONException ex) {
-                                            System.out.println("Error in" +
-                                                    " client:" +
-                                                    " " + ex.getMessage());
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    System.out.println("Error from " +
-                                            "server and " +
-                                            "client: " + error.getMessage());
-                                });
-
-                requestQueue.add(jsonObjectRequest);
             }
-        });
-
-        holder.btnReject.setOnClickListener(l -> {
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(holder.btnAddPatient.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("other", patients.get(position).getUsername());
-                params.put("category", "relation");
-                params.put("approval", "-1");
-
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "doctor/approve",
-                    params,
-                    response -> {
-                        try {
-                            response.get("success");
-                            Toast.makeText(holder.btnAddPatient.getContext(), "Request submitted", Toast.LENGTH_SHORT).show();
-                            holder.btnAddPatient.setText("Add Patient");
-                            holder.btnAddPatient.setClickable(false);
-                            holder.btnReject.setClickable(false);
-                        } catch (JSONException e) {
-                            try {
-                                Toast.makeText(holder.btnAddPatient.getContext(), response.get("error").toString(),
-                                        Toast.LENGTH_SHORT).show();
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
-                        }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
-                    });
-
-            requestQueue.add(jsonObjectRequest);
         });
     }
 
@@ -255,9 +97,7 @@ public class PatientRecyclerviewAdapter extends RecyclerView.Adapter<PatientRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtPatientName, txtPatientContact;
-        Button btnAddPatient, btnReject;
-
-        String approver;
+        Button btnAddPatient;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -265,7 +105,7 @@ public class PatientRecyclerviewAdapter extends RecyclerView.Adapter<PatientRecy
             txtPatientContact =
                     itemView.findViewById(R.id.txtPatientContact);
             btnAddPatient = itemView.findViewById(R.id.btnAddPatient);
-            btnReject = itemView.findViewById(R.id.btnReject);
+
         }
     }
 }

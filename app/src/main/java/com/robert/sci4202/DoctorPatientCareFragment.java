@@ -6,15 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -28,6 +21,9 @@ import androidx.fragment.app.Fragment;
 public class DoctorPatientCareFragment extends Fragment {
 
     public String patientID = null;
+    public String fullname = null;
+
+    public String contact = null;
 
     public DoctorPatientCareFragment() {
         // Required empty public constructor
@@ -66,54 +62,18 @@ public class DoctorPatientCareFragment extends Fragment {
         List<UserData> userData =
                 userDatabase.userDataDAO().getAllUserData();
 
-        RequestQueue requestQueue =
-                Volley.newRequestQueue(view.getContext());
-        String url = getString(R.string.endpoint) + "basic/profile";
+        TextView txtName =
+                view.findViewById(R.id.txtPatientName);
+        TextView txtContact =
+                view.findViewById(R.id.txtPatientContact);
 
-        JSONObject params = new JSONObject();
-        try {
-            params.put("username", patientID);
-            params.put("authorization",
-                    "Bearer " + userDatabase.userDataDAO()
-                            .getAllUserData().get(0).accessToken);
-
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                params,
-                response -> {
-                    try {
-                        JSONObject person =
-                                response.getJSONObject("person");
-                        String fullName = person.getString(
-                                "fullname");
-
-                        String contact = person.getString("contact");
-
-                        TextView txtName =
-                                view.findViewById(R.id.txtPatientName);
-                        TextView txtContact =
-                                view.findViewById(R.id.txtPatientContact);
-
-                        txtName.setText(fullName);
-                        txtContact.setText(contact);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                },
-                error -> {
-                    System.out.println("Error : " + error.getMessage());
-                });
-
-        requestQueue.add(jsonObjectRequest);
+        txtName.setText(fullname);
+        txtContact.setText(contact);
 
 
-        view.findViewById(R.id.btnPatientMedicine).setOnClickListener(l -> {
+        view.findViewById(R.id.btnPatientPrescription).setOnClickListener(l -> {
             PatientInforFragment fragment = new PatientInforFragment();
-            fragment.category = "medicine";
+            fragment.category = "prescriptions";
             fragment.patient = patientID;
             ShowFragment(fragment);
         });

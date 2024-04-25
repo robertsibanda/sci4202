@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class RPCRequests {
 
-    public static String url = "http://10.42.0.1:5005";
+    public static String url = "http://10.100.17.130:5005";
 
     public static ServerResult sendRequest(String method, Map params
     ) throws Exception {

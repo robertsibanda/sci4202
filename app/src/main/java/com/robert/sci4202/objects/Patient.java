@@ -1,18 +1,18 @@
 package com.robert.sci4202.objects;
 
 public class Patient {
-    private String imageUrl, contact, username, fullName, approver;
-    private Boolean requested, approved;
+    private String imageUrl, contact, username, fullName;
+    private Boolean canView, canUpdate;
 
 
-    public Patient(String imageUrl, String contact, String username, String fullName, String approver, Boolean requested, Boolean approved) {
+    public Patient(String imageUrl, String contact, String username,
+                   String fullName, Boolean canView, Boolean canUpdate) {
         this.imageUrl = imageUrl;
         this.contact = contact;
         this.username = username;
         this.fullName = fullName;
-        this.approver = approver;
-        this.requested = requested;
-        this.approved = approved;
+        this.canUpdate = canUpdate;
+        this.canView = canView;
     }
 
     public String getImageUrl() {
@@ -46,28 +46,20 @@ public class Patient {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
-    public Boolean getRequested() {
-        return requested;
+    
+    public Boolean getCanUpdate() {
+        return canUpdate;
     }
 
-    public void setRequested(Boolean requested) {
-        this.requested = requested;
+    public void setCanUpdate(Boolean canUpdate) {
+        this.canUpdate = canUpdate;
     }
 
-    public Boolean getApproved() {
-        return approved;
+    public Boolean getCanView() {
+        return canView;
     }
 
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
-
-    public String getApprover() {
-        return approver;
-    }
-
-    public void setApprover(String approver) {
-        this.approver = approver;
+    public void setCanView(Boolean canView) {
+        this.canView = canView;
     }
 }

@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
+import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
 
-import org.json.JSONObject;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 
@@ -55,9 +56,8 @@ public class AddAllegeFragment extends Fragment {
         UserDatabase userDatabase = UserDatabase
                 .getINSTANCE(view.getContext());
 
-
-        String accessToken =
-                userDatabase.userDataDAO().getAllUserData().get(0).accessToken;
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
 
         EditText etAllegeName =
                 view.findViewById(R.id.etAllegeName);
@@ -79,78 +79,58 @@ public class AddAllegeFragment extends Fragment {
                 Toast.makeText(view.getContext(), "Note is required",
                         Toast.LENGTH_SHORT).show();
             } else {
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(view.getContext());
+                new Thread(() -> {
 
-                String url = getString(R.string.endpoint) + "doctor" +
-                        "/allege";
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("person", patient);
-                    params.put("allege",
-                            etAllegeName.getText().toString());
-                    params.put("note",
-                            etAllegeNote.getText().toString());
-                    params.put("reaction",
-                            etAllegeReaction.getText().toString());
-                    params.put("authorization",
-                            "Bearer " + accessToken);
+                    Map<String, Object> params = new HashMap<>();
+                    try {
+                        params.put("patient", patient);
+                        params.put("doctor", userData.userID);
+                        params.put("type", "allege");
+                        params.put("allege",
+                                etAllegeName.getText().toString());
+                        params.put("reaction",
+                                etAllegeReaction.getText().toString());
+                        params.put("note",
+                                etAllegeNote.getText().toString());
+                        params.put("date", new Date().toLocaleString());
+                    } catch (Exception ex) {
+                        System.out.println("Params error : " + ex.getMessage());
+                    }
 
-                } catch (Exception ex) {
-                    System.out.println("Params error : " + ex.getMessage());
-                }
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url,
-                                params,
-                                response -> {
-                                    try {
-                                        System.out.println("Response " +
-                                                "from add " +
-                                                "allegse : " + response);
+                    try {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "update_records",
+                                params);
+                        System.out.println("Result : " + result.getResult());
+                        try {
+                            result.getResult().get("success");
+                        } catch (Exception ex) {
+                            try {
+                                Toast.makeText(view.getContext(),
+                                        result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(view.getContext(),
+                                        e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        System.out.println(result.getResult());
 
-                                        response.get("success");
-                                        Toast.makeText(view.getContext()
-                                                , "Allege " +
-                                                        "added " +
-                                                        "successfully",
-                                                Toast.LENGTH_SHORT).show();
-
-                                        PatientInforFragment fragment =
-                                                new PatientInforFragment();
-                                        fragment.category = "alleges";
-                                        fragment.patient = patient;
-                                        System.out.println("medicine " +
-                                                "clicked");
-                                        ShowFragment(fragment);
-
-                                    } catch (Exception ex) {
-                                        try {
-                                            System.out.println("Error " +
-                                                    "(inside " +
-                                                    "response) : " + response.get("error"));
-                                        } catch (Exception ex1) {
-                                            System.out.println("Error : "
-                                                    + ex1.getMessage());
-                                        }
-                                        System.out.println("Error " +
-                                                "(alleges" +
-                                                " outside" +
-                                                " response) : " + ex.getMessage());
-
-                                    }
-                                },
-                                error -> {
-                                    System.out.println("Error (allege " +
-                                            "add" +
-                                            " error):" +
-                                            " " + error.getMessage());
-                                }
-                        );
-
-                requestQueue.add(jsonObjectRequest);
-
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                //Do something on UiThread
+                                PatientInforFragment fragment =
+                                        new PatientInforFragment();
+                                fragment.category = "alleges";
+                                fragment.patient = patient;
+                                System.out.println("Results clicked");
+                                ShowFragment(fragment);
+                            }
+                        });
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }).start();
 
             }
         });

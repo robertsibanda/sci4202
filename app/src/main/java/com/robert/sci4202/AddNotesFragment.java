@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
+import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
 
-import org.json.JSONObject;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 
@@ -56,10 +57,11 @@ public class AddNotesFragment extends Fragment {
         UserDatabase userDatabase = UserDatabase
                 .getINSTANCE(view.getContext());
 
-        System.out.println("Infor from fragment : " + patient + " -> " + docName);
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
 
-        String accessToken =
-                userDatabase.userDataDAO().getAllUserData().get(0).accessToken;
+
+        System.out.println("Infor from fragment : " + patient + " -> " + docName);
 
         EditText etNotesText = view.findViewById(R.id.etNoteText);
 
@@ -70,62 +72,53 @@ public class AddNotesFragment extends Fragment {
                 Toast.makeText(view.getContext(), "Note must be more " +
                         "that 10 characters", Toast.LENGTH_SHORT).show();
             } else {
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(view.getContext());
 
-                String url = getString(R.string.endpoint) + "doctor/note";
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("person", patient);
+                new Thread(() -> {
+
+                    Map<String, String> params = new HashMap<>();
+
+                    params.put("type", "notes");
+                    params.put("patient", patient);
+                    params.put("date", new Date().toLocaleString());
                     params.put("content",
                             etNotesText.getText().toString());
-                    params.put("authorization",
-                            "Bearer " + accessToken);
+                    params.put("doctor", userData.userID);
+                    params.put("author", userData.fullName);
 
-                } catch (Exception ex) {
-                    System.out.println("Params error : " + ex.getMessage());
-                }
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                        Request.Method.POST,
-                        url,
-                        params,
-                        response -> {
+                    try {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "update_records",
+                                params);
+                        System.out.println("Result : " + result.getResult());
+                        try {
+                            result.getResult().get("success");
+                        } catch (Exception ex) {
                             try {
-                                System.out.println("Response from add " +
-                                        "notes : " + response);
-
-                                response.get("success");
-                                Toast.makeText(view.getContext(), "Note " +
-                                                "added successfully",
+                                Toast.makeText(view.getContext(),
+                                        result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(view.getContext(),
+                                        e.getMessage(),
                                         Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        System.out.println(result.getResult());
 
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                //Do something on UiThread
                                 PatientInforFragment fragment =
                                         new PatientInforFragment();
                                 fragment.category = "notes";
                                 fragment.patient = patient;
                                 System.out.println("Notes clicked");
                                 ShowFragment(fragment);
-
-                            } catch (Exception ex) {
-                                try {
-                                    System.out.println("Error (inside " +
-                                            "response) : " + response.get("error"));
-                                } catch (Exception ex1) {
-                                    System.out.println("Error : " + ex1.getMessage());
-                                }
-                                System.out.println("Error (notes outside" +
-                                        " response) : " + ex.getMessage());
-
                             }
-                        },
-                        error -> {
-                            System.out.println("Error (notes add error):" +
-                                    " " + error.getMessage());
-                        }
-                );
-
-                requestQueue.add(jsonObjectRequest);
+                        });
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }).start();
 
 
             }

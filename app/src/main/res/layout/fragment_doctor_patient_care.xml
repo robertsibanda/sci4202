@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Robert sibanda"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/txtPatientContact"
         app:layout_constraintHorizontal_bias="0.5"
@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="robertsibanda20@gmail.com"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/extendedFloatingActionButton"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddAppointment"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -88,7 +88,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btnPatientMedicine"
+            android:id="@+id/btnPatientPrescription"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="5dp"

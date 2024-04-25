@@ -17,6 +17,7 @@ import com.robert.sci4202.data.UserDatabase;
 import com.robert.sci4202.objects.MyDoctorItem;
 import com.robert.sci4202.objects.Patient;
 import com.robert.sci4202.recyclerviews.MyDoctorRecyclerviewAdapter;
+import com.robert.sci4202.recyclerviews.PatientRecyclerviewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -186,6 +187,7 @@ public class HomeFragment extends Fragment {
 
 
                         } else {
+                            PatientRecyclerviewAdapter patientRecyclerviewAdapter = new PatientRecyclerviewAdapter(view.getContext(), getParentFragmentManager());
                             ArrayList<Patient> patients =
                                     new ArrayList<>();
                             for (int num = 0; num < people.length(); num++) {
@@ -195,11 +197,26 @@ public class HomeFragment extends Fragment {
                                         "fullname");
                                 String contact = patient.getString(
                                         "contact");
+
+                                boolean canView = patient.getBoolean(
+                                        "view");
+                                boolean canUpdate = patient.getBoolean(
+                                        "update");
+
                                 String userid = patient.getString(
                                         "userid");
-                                //patients.add(new Patient())
 
+                                patients.add(new Patient("", contact,
+                                        userid, fullname, canView,
+                                        canUpdate));
                             }
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    //Do something on UiThread
+                                    patientRecyclerviewAdapter.setPatients(patients);
+                                    recyclerView.setAdapter(patientRecyclerviewAdapter);
+                                }
+                            });
 
                         }
 

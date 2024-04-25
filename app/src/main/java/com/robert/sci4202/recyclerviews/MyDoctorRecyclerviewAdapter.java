@@ -17,6 +17,7 @@ import com.robert.sci4202.objects.MyDoctorItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +58,11 @@ public class MyDoctorRecyclerviewAdapter
         holder.checkView.setChecked(myDoctorItems.get(position).isCanView());
         holder.checkUpdate.setChecked(myDoctorItems.get(position).isCanUpdate());
         holder.doctor = myDoctorItems.get(position).getUserId();
+
+        if (!Objects.equals(frag, "care")) {
+            holder.checkUpdate.setEnabled(false);
+            holder.checkView.setEnabled(false);
+        }
 
         holder.checkUpdate.setOnCheckedChangeListener((compoundButton,
                                                        b) -> {

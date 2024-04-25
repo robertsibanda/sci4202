@@ -66,32 +66,18 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnAddPatient"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="15dp"
-        android:layout_margin="3dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        app:layout_constraintTop_toBottomOf="@+id/txtPatientContact"
-        android:text="Add Patient"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnReject"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_margin="3dp"
         android:layout_marginBottom="15dp"
-        android:backgroundTint="#EC5252"
-        android:text="Delete"
+        android:text="View Patient"
         android:textSize="15dp"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/btnAddPatient"
+        app:layout_constraintStart_toStartOf="@+id/leftGuide"
         app:layout_constraintTop_toBottomOf="@+id/txtPatientContact" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
