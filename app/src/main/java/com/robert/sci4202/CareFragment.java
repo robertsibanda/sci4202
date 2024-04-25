@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.robert.sci4202.comm.RPCRequests;
 import com.robert.sci4202.comm.ServerResult;
 import com.robert.sci4202.data.UserData;
@@ -27,7 +23,6 @@ import com.robert.sci4202.recyclerviews.NotesRecyclerviewAdapter;
 import com.robert.sci4202.recyclerviews.PrescriptionRecyclerviewAdapter;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -85,145 +80,144 @@ public class CareFragment extends Fragment {
         view.findViewById(R.id.btnPatientNotes).setOnClickListener(l -> {
             // show patient notes on recyclerview
 
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(view.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("category", "notes");
-                params.put("value", "0");
+            System.out.println("Cliked Notes");
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            NotesRecyclerviewAdapter notesRecyclerviewAdapter =
+                    new NotesRecyclerviewAdapter();
 
+            new Thread(() -> {
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "patient/view",
-                    params,
-                    response -> {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("record", "notes");
+                params.put("patient", userData.userID);
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "view_health_records",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
                         try {
-                            JSONArray notes = response.getJSONArray(
-                                    "notes");
-                            ArrayList<Note> noteArrayList =
-                                    new ArrayList<>();
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    System.out.println(result.getResult());
+                    JSONArray notes =
+                            result.getResult().getJSONArray("success");
+                    ArrayList<Note> noteArrayList =
+                            new ArrayList<>();
+                    for (int num = 0; num < notes.length(); num++) {
+                        JSONObject note =
+                                notes.getJSONObject(num);
 
-                            System.out.println("Notes from server : " + notes);
+                        String author = "Dr" + note.getString(
+                                "author");
 
-                            for (int num = 0; num < notes.length(); num++) {
-                                JSONObject note =
-                                        notes.getJSONObject(num);
-                                String author = note.getString(
-                                        "doctor");
+                        String date = note.getString("date");
 
-                                String date = note.getString("date");
+                        String content = note.getString(
+                                "content");
+                        noteArrayList.add(new Note(date,
+                                content, author));
+                    }
 
-                                String content = note.getString(
-                                        "content");
-                                noteArrayList.add(new Note(date,
-                                        content, author));
-                            }
-
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                            NotesRecyclerviewAdapter notesRecyclerviewAdapter = new NotesRecyclerviewAdapter();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
                             notesRecyclerviewAdapter.setNotes(noteArrayList);
                             recyclerView.setAdapter(notesRecyclerviewAdapter);
-
-                        } catch (JSONException e) {
-                            try {
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
                         }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
                     });
-
-            requestQueue.add(jsonObjectRequest);
-        });
-
-
-        view.findViewById(R.id.btnPatientMedicine).setOnClickListener(l -> {
-            // show patient medicine
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }).start();
         });
 
         view.findViewById(R.id.btnPatientDiseases).setOnClickListener(l -> {
             // show patient diseases
         });
 
-        view.findViewById(R.id.btnPatientHistory).setOnClickListener(l -> {
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(view.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("category", "alleges");
-                params.put("value", "0");
+        view.findViewById(R.id.btnPatientAlleges).setOnClickListener(l -> {
+            // show patient alleges
+            System.out.println("Cliked alleges");
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            AllegeRecyclerviewAdapter allegeRecyclerviewAdapter =
+                    new AllegeRecyclerviewAdapter();
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            new Thread(() -> {
 
+                Map<String, String> params = new HashMap<>();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "patient/view",
-                    params,
-                    response -> {
+                params.put("record", "allege");
+                params.put("patient", userData.userID);
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "view_health_records",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
                         try {
-                            JSONArray alleges_ = response.getJSONArray(
-                                    "alleges");
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    JSONArray alleges =
+                            result.getResult().getJSONArray("success");
 
-                            ArrayList<Allege> alleges =
-                                    new ArrayList<>();
+                    ArrayList<Allege> allegeArrayList =
+                            new ArrayList<>();
 
-                            System.out.println("Alleges from server : "
-                                    + alleges_);
+                    for (int num = 0; num < alleges.length(); num++) {
+                        JSONObject allegesJSONObject =
+                                alleges.getJSONObject(num);
 
-                            for (int num = 0; num < alleges_.length(); num++) {
-                                JSONObject prescription =
-                                        alleges_.getJSONObject(num);
-
-                                String allege = prescription.getString(
+                        String allegeName =
+                                allegesJSONObject.getString(
                                         "allege");
 
-                                String note = prescription.getString(
+                        String allegeNote =
+                                allegesJSONObject.getString(
                                         "note");
 
-                                String reaction =
-                                        prescription.getString(
-                                                "reaction");
+                        String allegeReaction =
+                                allegesJSONObject.getString(
+                                        "reaction");
+                        String date = allegesJSONObject.getString(
+                                "date");
 
-                                String date = prescription.getString(
-                                        "date");
-                                alleges.add(new Allege(allege, note,
-                                        date, reaction));
-                            }
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                            AllegeRecyclerviewAdapter recyclerviewAdapter = new AllegeRecyclerviewAdapter();
-                            recyclerviewAdapter.setAlleges(alleges);
-                            recyclerView.setAdapter(recyclerviewAdapter);
 
-                        } catch (JSONException e) {
-                            try {
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
+                        allegeArrayList.add(new Allege(allegeName,
+                                allegeNote, date, allegeReaction));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            allegeRecyclerviewAdapter.setAlleges(allegeArrayList);
+                            recyclerView.setAdapter(allegeRecyclerviewAdapter);
                         }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
                     });
-
-            requestQueue.add(jsonObjectRequest);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }).start();
         });
 
         view.findViewById(R.id.btnPatientDoctors).setOnClickListener(l -> {
@@ -304,149 +298,155 @@ public class CareFragment extends Fragment {
 
         view.findViewById(R.id.btnPatientMedicine).setOnClickListener(l -> {
             // show patient prescriptions
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(view.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("category", "medicine");
-                params.put("value", "0");
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            PrescriptionRecyclerviewAdapter prescriptionRecyclerviewAdapter =
+                    new PrescriptionRecyclerviewAdapter();
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            new Thread(() -> {
 
+                Map<String, String> params = new HashMap<>();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "patient/view",
-                    params,
-                    response -> {
+                params.put("record", "prescription");
+                params.put("patient", userData.userID);
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "view_health_records",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
                         try {
-                            JSONArray medicine = response.getJSONArray(
-                                    "medicine");
-                            ArrayList<Prescription> prescriptions =
-                                    new ArrayList<>();
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    JSONArray prescriptions =
+                            result.getResult().getJSONArray("success");
+                    System.out.println("PRescriptions : " + prescriptions);
 
-                            System.out.println("Notes from server : " + medicine);
+                    ArrayList<Prescription> prescriptionArrayList =
+                            new ArrayList<>();
 
-                            for (int num = 0; num < medicine.length(); num++) {
-                                JSONObject prescription =
-                                        medicine.getJSONObject(num);
+                    for (int num = 0; num < prescriptions.length(); num++) {
+                        JSONObject prescriptionsJSONObject =
+                                prescriptions.getJSONObject(num);
 
-                                String drug = prescription.getString(
-                                        "medicine");
+                        String medicine =
+                                prescriptionsJSONObject.getString(
+                                        "medicine_name");
 
-                                String qty = prescription.getString("qty");
+                        String qty =
+                                prescriptionsJSONObject.getString(
+                                        "qty");
 
-                                String patient = prescription.getString(
-                                        "patient");
-
-                                String note = prescription.getString(
+                        String note =
+                                prescriptionsJSONObject.getString(
                                         "note");
 
-                                String doctor = prescription.getString(
-                                        "doctor");
-                                String date = prescription.getString(
+                        String date =
+                                prescriptionsJSONObject.getString(
                                         "date");
-                                prescriptions.add(new Prescription(drug,
-                                        note, date, qty, doctor));
 
-                            }
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                            PrescriptionRecyclerviewAdapter recyclerviewAdapter = new PrescriptionRecyclerviewAdapter();
-                            recyclerviewAdapter.setPrescriptions(prescriptions);
-                            recyclerView.setAdapter(recyclerviewAdapter);
+                        String doctor =
+                                prescriptionsJSONObject.getString(
+                                        "doctor");
+                        String author =
+                                "Dr" + prescriptionsJSONObject.getString(
+                                        "author");
 
 
-                        } catch (JSONException e) {
-                            try {
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
+                        prescriptionArrayList.add(new Prescription(medicine, note, date, qty, author));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            prescriptionRecyclerviewAdapter.setPrescriptions(prescriptionArrayList);
+                            recyclerView.setAdapter(prescriptionRecyclerviewAdapter);
                         }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
                     });
-
-            requestQueue.add(jsonObjectRequest);
-
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }).start();
         });
 
         view.findViewById(R.id.btnPatientLabResults).setOnClickListener(l -> {
             // show patient lab results
-            RequestQueue requestQueue =
-                    Volley.newRequestQueue(view.getContext());
-            JSONObject params = new JSONObject();
-            try {
-                params.put("authorization",
-                        "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                params.put("category", "results");
-                params.put("value", "0");
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            LabResultRecyclerviewAdapter labResultRecyclerviewAdapter =
+                    new LabResultRecyclerviewAdapter();
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            new Thread(() -> {
 
+                Map<String, String> params = new HashMap<>();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url + "patient/view",
-                    params,
-                    response -> {
+                params.put("record", "test");
+                params.put("patient", userData.userID);
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "view_health_records",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
                         try {
-                            JSONArray results = response.getJSONArray(
-                                    "results");
-                            ArrayList<LabResult> labResults =
-                                    new ArrayList<>();
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    System.out.println(result.getResult());
+                    JSONArray results =
+                            result.getResult().getJSONArray("success");
+                    System.out.println("Results : " + results);
+                    ArrayList<LabResult> labResults =
+                            new ArrayList<>();
 
-                            for (int num = 0; num < results.length(); num++) {
-                                JSONObject result =
-                                        results.getJSONObject(num);
+                    for (int num = 0; num < results.length(); num++) {
+                        JSONObject labResult =
+                                results.getJSONObject(num);
 
-                                String testName = result.getString(
-                                        "test");
+                        String testName = labResult.getString(
+                                "test");
 
-                                String testCode = result.getString(
-                                        "test_code");
+                        String testCode = labResult.getString(
+                                "test_code");
 
-                                String resultName = result.getString(
-                                        "result");
+                        String resultName = labResult.getString(
+                                "result");
+                        String resultCode = labResult.getString(
+                                "result_code");
 
-                                String resultCode = result.getString(
-                                        "result_code");
-                                String testDate = result.getString(
-                                        "date");
+                        String testDate = labResult.getString("date");
 
-                                labResults.add(new LabResult(testName,
-                                        testCode, resultName, resultCode
-                                        , testDate));
-                            }
+                        labResults.add(new LabResult(testName,
+                                testCode, resultName, resultCode,
+                                testDate));
+                    }
 
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                            LabResultRecyclerviewAdapter labResultRecyclerviewAdapter =
-                                    new LabResultRecyclerviewAdapter();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
                             labResultRecyclerviewAdapter.setLabResults(labResults);
                             recyclerView.setAdapter(labResultRecyclerviewAdapter);
-
-                        } catch (JSONException e) {
-                            try {
-                                System.out.println("Error from server: " + response.get("error"));
-                            } catch (JSONException ex) {
-                                System.out.println("Error in client: " + ex.getMessage());
-                            }
                         }
-                    },
-                    error -> {
-                        System.out.println("Error from server and " +
-                                "client: " + error.getMessage());
                     });
-
-            requestQueue.add(jsonObjectRequest);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }).start();
         });
         // recyclerview for displaying all the patient care information
         // based on category selected

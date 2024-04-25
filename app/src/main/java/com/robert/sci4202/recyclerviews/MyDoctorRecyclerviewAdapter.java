@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.robert.sci4202.R;
@@ -59,20 +58,26 @@ public class MyDoctorRecyclerviewAdapter
         holder.checkUpdate.setChecked(myDoctorItems.get(position).isCanUpdate());
         holder.doctor = myDoctorItems.get(position).getUserId();
 
+
         if (!Objects.equals(frag, "care")) {
             holder.checkUpdate.setEnabled(false);
             holder.checkView.setEnabled(false);
         }
 
-        holder.checkUpdate.setOnCheckedChangeListener((compoundButton,
-                                                       b) -> {
-            //TODO handle update permissions
+        holder.checkUpdate.setOnClickListener(l -> {
+            boolean update;
+            if (holder.checkUpdate.isChecked()) {
+                update = true;
+            } else {
+                update = false;
+            }
+
             new Thread(() -> {
                 Map<String, Object> params = new HashMap<>();
                 try {
                     params.put("userid", userData.userID);
                     params.put("perm", "update");
-                    params.put("perm-code", b);
+                    params.put("perm-code", update);
                     params.put("doctor", holder.doctor);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -90,37 +95,40 @@ public class MyDoctorRecyclerviewAdapter
 
             }).start();
         });
+        holder.checkView.setOnClickListener(l -> {
 
-
-        holder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton,
-                                         boolean b) {
-                //TODO handle view permissions
-                new Thread(() -> {
-                    Map<String, Object> params = new HashMap<>();
-                    try {
-                        params.put("userid", userData.userID);
-                        params.put("perm", "view");
-                        params.put("perm-code", b);
-                        params.put("doctor", holder.doctor);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    try {
-                        ServerResult result = RPCRequests.sendRequest(
-                                "update_data_permissions",
-                                params);
-                        result.getResult().get("success");
-                        System.out.println("Result from view :" + result.getResult());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }).start();
+            boolean view;
+            if (holder.checkView.isChecked()) {
+                view = true;
+            } else {
+                view = false;
             }
+
+            new Thread(() -> {
+                Map<String, Object> params = new HashMap<>();
+                try {
+                    params.put("userid", userData.userID);
+                    params.put("perm", "view");
+                    params.put("perm-code", view);
+                    params.put("doctor", holder.doctor);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "update_data_permissions",
+                            params);
+                    result.getResult().get("success");
+                    System.out.println("Result from view :" + result.getResult());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }).start();
+
         });
+
 
     }
 

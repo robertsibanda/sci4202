@@ -181,6 +181,8 @@ public class HomeFragment extends Fragment {
                                 public void run() {
                                     //Do something on UiThread
                                     myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
+                                    myDoctorRecyclerviewAdapter.frag =
+                                            "care";
                                     recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
                                 }
                             });

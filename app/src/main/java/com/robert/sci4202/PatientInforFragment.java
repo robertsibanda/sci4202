@@ -178,6 +178,7 @@ public class PatientInforFragment extends Fragment {
                     params.put("record", "notes");
                     params.put("patient", patient);
                     params.put("doctor", userData.userID);
+                    params.put("doctor_name", userData.userName);
 
                     try {
                         ServerResult result = RPCRequests.sendRequest(
@@ -241,7 +242,7 @@ public class PatientInforFragment extends Fragment {
                     params.put("record", "prescription");
                     params.put("patient", patient);
                     params.put("doctor", userData.userID);
-                    params.put("author", userData.fullName);
+                    params.put("doctor_name", userData.fullName);
 
                     try {
                         ServerResult result = RPCRequests.sendRequest(
@@ -322,6 +323,7 @@ public class PatientInforFragment extends Fragment {
                     params.put("record", "test");
                     params.put("patient", patient);
                     params.put("doctor", userData.userID);
+                    params.put("doctor_name", userData.userName);
 
                     try {
                         ServerResult result = RPCRequests.sendRequest(
@@ -394,6 +396,7 @@ public class PatientInforFragment extends Fragment {
                     params.put("record", "allege");
                     params.put("patient", patient);
                     params.put("doctor", userData.userID);
+                    params.put("doctor_name", userData.userName);
 
                     try {
                         ServerResult result = RPCRequests.sendRequest(
