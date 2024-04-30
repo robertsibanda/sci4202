@@ -25,29 +25,30 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.navBottomNav);
 
 
-        UserDatabase userDatabase = UserDatabase.getINSTANCE(this.getApplicationContext());
-        List<UserData> userData = userDatabase.userDataDAO().getAllUserData();
+        UserDatabase userDatabase =
+                UserDatabase.getINSTANCE(this.getApplicationContext());
+        List<UserData> userData =
+                userDatabase.userDataDAO().getAllUserData();
 
 
         if (userData.isEmpty()) {
-            Toast.makeText(this, "Please login to use our service", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this.getApplicationContext(), LoginActivity.class));
-        }
-        else {
+            Toast.makeText(this, "Please login to use our service",
+                    Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this.getApplicationContext(),
+                    LoginActivity.class));
+        } else {
             showFragment(new HomeFragment());
 
-            if(userData.get(0).userType.equals("doctor")) {
-                try{
+            if (userData.get(0).userType.equals("doctor")) {
+                try {
                     bottomNavigationView.inflateMenu(R.menu.bottom_menu_doc);
-                }catch (Exception ex) {
+                } catch (Exception ex) {
                     System.out.println("Error at navbar : " + ex.getMessage());
                 }
-            }
-
-            else {
-                try{
+            } else {
+                try {
                     bottomNavigationView.inflateMenu(R.menu.bottom_menu);
-                }catch (Exception ex) {
+                } catch (Exception ex) {
                     System.out.println("Error at navbar : " + ex.getMessage());
                 }
             }
@@ -55,30 +56,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
-        bottomNavigationView.setOnItemSelectedListener( item -> {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 showFragment(new HomeFragment());
                 return true;
-            }
-            else if (item.getItemId() == R.id.bottom_data) {
+            } else if (item.getItemId() == R.id.bottom_data) {
                 if (userDatabase.userDataDAO().getAllUserData().get(0).userType.equals("doctor")) {
-                   //show care fragment for doctors
+                    //show care fragment for doctors
                     showFragment(new DoctorPatientCareFragment());
                     return true;
-                }
-                else {
+                } else {
                     showFragment(new CareFragment());
                     return true;
                 }
-            }
-
-            else if (item.getItemId() == R.id.bottom_settings) {
-                showFragment(new SettingsFragment());
+            } else if (item.getItemId() == R.id.bottom_settings) {
+                showFragment(new NewSettings());
                 return true;
-            }
-
-            else if (item.getItemId() == R.id.bottom_calender) {
-                showFragment( new CalenderFragment());
+            } else if (item.getItemId() == R.id.bottom_calender) {
+                showFragment(new CalenderFragment());
                 return true;
             }
             return false;

@@ -32,10 +32,27 @@
         android:drawableStart="@drawable/hospital_svgrepo_com"
         android:hint="organisation"
         android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etBio"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        app:layout_constraintRight_toLeftOf="@id/rightGuide"
+        app:layout_constraintTop_toBottomOf="@+id/etProff" />
+
+
+    <EditText
+        android:id="@+id/etBio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:drawableStart="@drawable/documents_minimalistic_svgrepo_com"
+        android:hint="bio"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/btnCompeteSignup"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        app:layout_constraintRight_toLeftOf="@id/rightGuide" />
+        app:layout_constraintRight_toLeftOf="@id/rightGuide"
+        app:layout_constraintTop_toBottomOf="@+id/etHospital" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -57,6 +74,7 @@
         android:textColor="#181345"
         android:textSize="20dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etProff"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
         app:layout_constraintRight_toLeftOf="@id/rightGuide"

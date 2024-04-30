@@ -7,33 +7,6 @@
     android:layout_marginTop="5dp"
     tools:context=".DoctorPatientCareFragment">
 
-    <TextView
-        android:id="@+id/txtPatientName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Robert sibanda"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtPatientContact"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtPatientContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="robertsibanda20@gmail.com"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddAppointment"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPatientName" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navPatientInfor"
         android:layout_width="0dp"
@@ -153,7 +126,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgResults" />
+                app:layout_constraintTop_toBottomOf="@+id/imgResults" />
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imgResults"
@@ -161,7 +134,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/test_tube_svgrepo_com"
-                app:layout_constraintBottom_toTopOf="@+id/txtResults"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -247,7 +219,6 @@
                 android:padding="10dp"
                 android:src="@drawable/allegies"
 
-                app:layout_constraintBottom_toTopOf="@+id/txtHistory"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -287,7 +258,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/doctor_6237590"
-                app:layout_constraintBottom_toTopOf="@+id/txtAllegies"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -340,7 +310,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -355,28 +325,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/maxGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.88" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnAddAppointment"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="3dp"
-        android:text="Place Appointment"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/navPatientInfor"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPatientContact"
-        app:layout_goneMarginTop="5dp" />
+        app:layout_constraintGuide_percent="0.9" />
 
 
     <com.google.android.material.navigation.NavigationView

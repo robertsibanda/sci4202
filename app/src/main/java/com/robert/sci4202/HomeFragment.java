@@ -14,8 +14,10 @@ import com.robert.sci4202.comm.RPCRequests;
 import com.robert.sci4202.comm.ServerResult;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
+import com.robert.sci4202.objects.DoctorAppointment;
 import com.robert.sci4202.objects.MyDoctorItem;
 import com.robert.sci4202.objects.Patient;
+import com.robert.sci4202.recyclerviews.DoctorAppointmentRecyclerviewAdapter;
 import com.robert.sci4202.recyclerviews.MyDoctorRecyclerviewAdapter;
 import com.robert.sci4202.recyclerviews.PatientRecyclerviewAdapter;
 
@@ -66,9 +68,6 @@ public class HomeFragment extends Fragment {
         UserData userData =
                 userDatabase.userDataDAO().getAllUserData().get(0);
 
-        System.out.println("Private Key: " + userData.userID);
-        System.out.println("Public Key: " + userData.publicKeyExponent);
-
         String fullName = userData.fullName;
 
         if (Objects.equals(userData.userType, "doctor")) {
@@ -95,6 +94,10 @@ public class HomeFragment extends Fragment {
                 */
 
         RecyclerView recyclerView = view.findViewById(R.id.recviewHome);
+
+        RecyclerView recyclerViewNotifications =
+                view.findViewById(R.id.recViewNotifications);
+
         etSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i,
@@ -128,6 +131,8 @@ public class HomeFragment extends Fragment {
                 String finalSearch_type = search_type;
                 MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter
                         = new MyDoctorRecyclerviewAdapter();
+                myDoctorRecyclerviewAdapter.fragmentManager =
+                        getParentFragmentManager();
 
                 new Thread(() -> {
                     try {
@@ -174,7 +179,9 @@ public class HomeFragment extends Fragment {
 
                                 String userid = person.getString("userid");
 
-                                myDoctorItems.add(new MyDoctorItem(fullname, "", contact, occupation, organistion, userid, canView, canUpdate));
+                                String biography = person.getString("bio");
+
+                                myDoctorItems.add(new MyDoctorItem(fullname, "", contact, occupation, organistion, userid, canView, canUpdate, biography));
                             }
 
                             getActivity().runOnUiThread(new Runnable() {
@@ -223,7 +230,7 @@ public class HomeFragment extends Fragment {
                         }
 
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Error : " + e.getMessage());
                     }
                 }).start();
 
@@ -233,7 +240,86 @@ public class HomeFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
-        //TODO get user notifications and messages
+
+        new Thread(() -> {
+            //get user notifications
+        }).start();
+
+
+        new Thread(() -> {
+
+            Map<String, String> params = new HashMap<>();
+
+            String user_type = null;
+
+            if (userData.userType.equals("patient")) {
+                user_type = "patients";
+            } else {
+                user_type = "doctor";
+            }
+            params.put("userid", userData.userID);
+            params.put("user_type", user_type);
+            params.put("date", "all");
+
+            //get user appointments
+            try {
+                ServerResult result = RPCRequests.sendRequest(
+                        "get_appointments",
+                        params);
+                System.out.println("Appointments : " + result.getResult());
+                try {
+                    result.getResult().get("success");
+                } catch (Exception ex) {
+                    try {
+                        Toast.makeText(view.getContext(),
+                                result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(view.getContext(),
+                                e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+                System.out.println(result.getResult());
+                DoctorAppointmentRecyclerviewAdapter calenderRecyclerviewAdapter
+                        = new DoctorAppointmentRecyclerviewAdapter();
+                ArrayList<DoctorAppointment> calendars = new ArrayList<>();
+
+                JSONArray appointments =
+                        result.getResult().getJSONArray("success");
+                for (int i = 0; i < appointments.length(); i++) {
+                    JSONObject appointment = appointments.getJSONObject(i);
+                    String doctorName, doctorProfession, appointmentDate,
+                            getAppointmentTime, appointmendDescription,
+                            doctor_contact;
+
+                    doctorName = appointment.getString("doctor_name");
+                    doctorProfession = appointment.getString(
+                            "doctor_proff");
+
+                    appointmentDate = appointment.getString("date");
+                    getAppointmentTime = appointment.getString("time");
+                    appointmendDescription = appointment.getString(
+                            "description");
+                    calendars.add(new DoctorAppointment(doctorName,
+                            doctorProfession, appointmentDate,
+                            getAppointmentTime, appointmendDescription,
+                            true));
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        //Do something on UiThread
+                        recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+                        calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
+                        recyclerViewNotifications.setAdapter(calenderRecyclerviewAdapter);
+                    }
+                });
+
+
+            } catch (Exception e) {
+                System.out.println("Error : " + e.getMessage());
+            }
+        }).start();
 
         return view;
     }

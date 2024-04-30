@@ -62,5 +62,5 @@
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
         app:layout_constraintRight_toLeftOf="@id/rightGuide"
         app:layout_constraintTop_toBottomOf="@id/middleguide" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>

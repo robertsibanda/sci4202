@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:padding="10dp"
+    android:layout_margin="5dp"
+    android:backgroundTint="#4F0097A7"
+
+    android:background="@drawable/appointment_background">
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnViewDocProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#6FD2D2D2"
+        android:text="View Profile"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnAppointmentDate"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imgDoctorImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#1991E1D8"
+        android:src="@drawable/robert"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/leftGuide"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="20dp" />
+
+    <TextView
+        android:id="@+id/txtDoctorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Dr James Michael" />
+
+    <TextView
+        android:id="@+id/txtDoctorProffession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/txtDoctorName"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        android:layout_marginLeft="15dp"
+        android:text="General Practitioner" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

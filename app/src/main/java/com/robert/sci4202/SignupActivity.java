@@ -79,6 +79,7 @@ public class SignupActivity extends AppCompatActivity {
                 userData.fullName = fullname;
                 userData.password = password;
                 userData.contact = contact;
+                userData.ingoreLogin = false;
                 userData.privateKey = Keys.convertPEM(privateKey);
                 userData.publicKey = Keys.convertPEM(publicKey);
 

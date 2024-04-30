@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
 }
 
+
 android {
     namespace = "com.robert.sci4202"
     compileSdk = 34
@@ -13,7 +14,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner =
+            "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -28,6 +30,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
+
     }
     buildFeatures {
         viewBinding = true
@@ -54,6 +58,8 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+
     // volley for rest-api calls
     implementation("com.android.volley:volley:1.2.1")
 
@@ -70,4 +76,7 @@ dependencies {
 
     // glide for remote image loading
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
 }

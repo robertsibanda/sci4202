@@ -277,9 +277,11 @@ public class CareFragment extends Fragment {
 
                         String userid = person.getString("userid");
 
+                        String biography = person.getString("bio");
+
                         myDoctorItems.add(new MyDoctorItem(fullname, "",
                                 contact, occupation, organistion, userid
-                                , canView, canUpdate));
+                                , canView, canUpdate, biography));
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {

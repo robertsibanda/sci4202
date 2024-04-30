@@ -2,12 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/notification_background"
-    android:backgroundTint="#7C8692F7"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
+    android:backgroundTint="#7CD4D6E3"
+    android:layout_margin="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.Guideline
@@ -15,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imgPatientImage"
@@ -42,12 +40,11 @@
         android:id="@+id/txtPatientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dr James"
-        android:textSize="15dp"
-        android:textStyle="bold"
         android:padding="8dp"
+        android:text="Dr James"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -57,21 +54,20 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="doc@organisation.com"
-        android:textSize="15dp"
+        android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/txtPatientName"
         app:layout_constraintBottom_toTopOf="@id/btnAddPatient"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/txtPatientName" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnAddPatient"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_margin="3dp"
         android:layout_marginBottom="15dp"
         android:text="View Patient"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -3,9 +3,11 @@ package com.robert.sci4202.recyclerviews;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.robert.sci4202.DoctorPofile;
 import com.robert.sci4202.R;
 import com.robert.sci4202.comm.RPCRequests;
 import com.robert.sci4202.comm.ServerResult;
@@ -19,6 +21,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyDoctorRecyclerviewAdapter
@@ -30,6 +34,7 @@ public class MyDoctorRecyclerviewAdapter
 
 
     public String frag;
+    public FragmentManager fragmentManager;
 
     @NonNull
     @Override
@@ -39,6 +44,13 @@ public class MyDoctorRecyclerviewAdapter
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.doctor_list_item, parent, false);
         return new ViewHolder(view);
+    }
+
+
+    public void ShowFragment(Fragment fragment) {
+        this.fragmentManager.beginTransaction()
+                .replace(R.id.navHostFragment, fragment)
+                .commit();
     }
 
     @Override
@@ -58,6 +70,18 @@ public class MyDoctorRecyclerviewAdapter
         holder.checkUpdate.setChecked(myDoctorItems.get(position).isCanUpdate());
         holder.doctor = myDoctorItems.get(position).getUserId();
 
+
+        holder.btnDocProfile.setOnClickListener(l -> {
+            DoctorPofile doctorPofile = new DoctorPofile();
+            doctorPofile.doctorID = holder.doctor;
+            doctorPofile.contact =
+                    holder.txtDocContact.getText().toString();
+            doctorPofile.fullname = holder.txtDocName.getText().toString();
+            doctorPofile.proffession =
+                    holder.txtDocPractice.getText().toString();
+            doctorPofile.bio = myDoctorItems.get(position).getBiography();
+            ShowFragment(doctorPofile);
+        });
 
         if (!Objects.equals(frag, "care")) {
             holder.checkUpdate.setEnabled(false);
@@ -147,6 +171,8 @@ public class MyDoctorRecyclerviewAdapter
         CheckBox checkView, checkUpdate;
         String doctor;
 
+        Button btnDocProfile;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtDocName = itemView.findViewById(R.id.txtDocName);
@@ -155,6 +181,7 @@ public class MyDoctorRecyclerviewAdapter
             txtDocPractice = itemView.findViewById(R.id.txtDocPractice);
             checkUpdate = itemView.findViewById(R.id.checkUpdate);
             checkView = itemView.findViewById(R.id.checkView);
+            btnDocProfile = itemView.findViewById(R.id.btnProfile);
         }
     }
 }

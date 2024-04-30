@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(this.getApplicationContext());
 
-
         //startActivity(new Intent(this, MainActivity.class));
 
         if (userDatabase.userDataDAO().getAllUserData().size() > 0) {
@@ -47,37 +46,44 @@ public class LoginActivity extends AppCompatActivity {
 
             UserData userData =
                     userDatabase.userDataDAO().getAllUserData().get(0);
-            findViewById(R.id.btnLogin).setOnClickListener(l -> {
-                EditText etUsername = findViewById(R.id.etUsername);
-                EditText etPassword = findViewById(R.id.etPassword);
+            if (userData.ingoreLogin) {
+                startActivity(new Intent(this,
+                        MainActivity.class));
+            } else {
+                findViewById(R.id.btnLogin).setOnClickListener(l -> {
+                    EditText etUsername = findViewById(R.id.etUsername);
+                    EditText etPassword = findViewById(R.id.etPassword);
 
-                if (etUsername.getText().length() > 3 && etPassword
-                        .getText().length() > 3) {
-                    try {
-                        String username =
-                                etUsername.getText().toString();
-                        String password =
-                                etPassword.getText().toString();
+                    if (etUsername.getText().length() > 3 && etPassword
+                            .getText().length() > 3) {
+                        try {
+                            String username =
+                                    etUsername.getText().toString();
+                            String password =
+                                    etPassword.getText().toString();
 
-                        if (username.equals(userData.userName) &
-                                password.equals(userData.password)) {
+                            if (username.equals(userData.userName) &
+                                    password.equals(userData.password)) {
 
-                            startActivity(new Intent(this,
-                                    MainActivity.class));
-                        } else {
-                            Toast.makeText(this, "wrong username/password",
-                                    Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this,
+                                        MainActivity.class));
+                            } else {
+                                Toast.makeText(this, "wrong " +
+                                                "username/password",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
 
-                } else {
-                    Toast.makeText(this, "username & password must be " +
-                                    "greater that 3 characters long",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+                    } else {
+                        Toast.makeText(this, "username & password must " +
+                                        "be " +
+                                        "greater that 3 characters long",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
         } else {
             startActivity(new Intent(this, SignupActivity.class));

@@ -4,20 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.robert.sci4202.data.UserData;
-import com.robert.sci4202.data.UserDatabase;
-
-import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DoctorPatientCareFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DoctorPatientCareFragment extends Fragment {
 
     public String patientID = null;
@@ -56,20 +45,6 @@ public class DoctorPatientCareFragment extends Fragment {
         View view =
                 inflater.inflate(R.layout.fragment_doctor_patient_care,
                         container, false);
-
-        UserDatabase userDatabase =
-                UserDatabase.getINSTANCE(view.getContext());
-        List<UserData> userData =
-                userDatabase.userDataDAO().getAllUserData();
-
-        TextView txtName =
-                view.findViewById(R.id.txtPatientName);
-        TextView txtContact =
-                view.findViewById(R.id.txtPatientContact);
-
-        txtName.setText(fullname);
-        txtContact.setText(contact);
-
 
         view.findViewById(R.id.btnPatientPrescription).setOnClickListener(l -> {
             PatientInforFragment fragment = new PatientInforFragment();
@@ -114,7 +89,8 @@ public class DoctorPatientCareFragment extends Fragment {
             ShowFragment(fragment);
         });
 
-        view.findViewById(R.id.btnAddAppointment).setOnClickListener(l -> {
+     /*   view.findViewById(R.id.btnAddAppointment).setOnClickListener(l
+      -> {
             System.out.println("opening doctor patient care fragment");
             AddAppointmentFragment fragment = new AddAppointmentFragment();
             fragment.person = patientID;
@@ -122,7 +98,7 @@ public class DoctorPatientCareFragment extends Fragment {
                     .replace(R.id.navHostFragment, fragment)
                     .commit();
         });
-
+*/
 
         return view;
     }

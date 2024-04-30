@@ -10,11 +10,14 @@ public class MyDoctorItem {
     private String organisation;
     private String userId;
     private boolean canView, canUpdate;
+    
+    private String biography;
 
     public MyDoctorItem(String name, String imageUrl, String contact,
                         String profession, String hospital,
                         String userId,
-                        boolean canView, boolean canUpdate) {
+                        boolean canView, boolean canUpdate,
+                        String biography) {
 
         this.name = name;
         this.imageUrl = imageUrl;
@@ -24,6 +27,7 @@ public class MyDoctorItem {
         this.userId = userId;
         this.canView = canView;
         this.canUpdate = canUpdate;
+        this.biography = biography;
     }
 
     public String getName() {
@@ -90,4 +94,11 @@ public class MyDoctorItem {
         this.canView = canView;
     }
 
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
 }

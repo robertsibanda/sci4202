@@ -144,11 +144,13 @@ public class PatientInforFragment extends Fragment {
 
                             String userid = person.getString("userid");
 
+                            String biography = person.getString("bio");
+                            
                             myDoctorItems.add(new MyDoctorItem(fullname,
                                     "",
                                     contact, occupation, organistion,
                                     userid
-                                    , canView, canUpdate));
+                                    , canView, canUpdate, biography));
                         }
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
@@ -475,6 +477,12 @@ public class PatientInforFragment extends Fragment {
                 fragment.patient = this.patient;
                 ShowFragment(fragment);
             } else if (btnAddPatientInfo.getText().equals("Add Allege")) {
+                AddAllegeFragment fragment = new AddAllegeFragment();
+                fragment.patient = this.patient;
+                ShowFragment(fragment);
+
+            } else if (btnAddPatientInfo.getText().equals("Add " +
+                    "Prescription")) {
                 AddAllegeFragment fragment = new AddAllegeFragment();
                 fragment.patient = this.patient;
                 ShowFragment(fragment);

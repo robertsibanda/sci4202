@@ -34,9 +34,10 @@ public class SignupDoctorCompleteActivity extends AppCompatActivity {
             return insets;
         });
 
-        EditText etProff, etHospital;
+        EditText etProff, etHospital, etBio;
         etProff = findViewById(R.id.etProff);
         etHospital = findViewById(R.id.etHospital);
+        etBio = findViewById(R.id.etBio);
 
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(this.getApplicationContext());
@@ -55,6 +56,7 @@ public class SignupDoctorCompleteActivity extends AppCompatActivity {
                 params.put("contact", userData.contact);
                 params.put("usertype", userData.userType);
                 params.put("public_key", userData.publicKey);
+                params.put("bio", etBio.getText().toString());
                 params.put("organisation",
                         etHospital.getText().toString());
                 params.put("occupation", etProff.getText().toString());

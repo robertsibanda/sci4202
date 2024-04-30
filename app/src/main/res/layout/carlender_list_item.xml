@@ -3,129 +3,129 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="135dp">
+    android:layout_height="190dp"
+    android:padding="10dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/appointment_background">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomGuide"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topGuide"
-        android:background="@drawable/notification_background"
-        android:backgroundTint="#D7D1D1"
-        android:layout_marginTop="10dp">
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/innerLeftGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/innerRightGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/innerTopguide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.33" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/innerHalfGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/innerMiddleguide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.67" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/info_square_svgrepo_com"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/innerTopguide"
-            app:layout_constraintRight_toLeftOf="@id/innerLeftGuide"
-            android:layout_margin="20dp" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintRight_toLeftOf="@id/innerLeftGuide"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/innerTopguide"
-            app:layout_constraintBottom_toTopOf="@id/innerMiddleguide"
-            android:src="@drawable/bell_bing_svgrepo_com"
-            android:layout_margin="20dp" />
-
-
-        <TextView
-            android:id="@+id/txtEventTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Patient Visit"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/innerTopguide"
-            app:layout_constraintLeft_toRightOf="@id/innerLeftGuide"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtOtherPerson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:text="Patient Visit"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/innerTopguide"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/innerLeftGuide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.428" />
-
-        <TextView
-            android:id="@+id/txtEventTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1200 - 1300"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/innerMiddleguide"
-            app:layout_constraintLeft_toRightOf="@id/innerLeftGuide"
-            app:layout_constraintTop_toTopOf="@id/innerTopguide" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottomGuide"
+    <TextView
+        android:id="@+id/txtDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        android:layout_margin="10dp"
+        android:text="@string/date_time"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/middleGuide" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnAppointmentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:backgroundTint="#00D2D2D2"
+        android:drawableLeft="@drawable/calendar_svgrepo_com"
+        android:text="20 NOV 2024"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDateLabel" />
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnAppointmentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#00D2D2D2"
+        android:drawableLeft="@drawable/alarm_play_svgrepo_com"
+        android:text="10:30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnAppointmentDate"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDateLabel" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/txtAppointmentDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/topGuide"
+        app:layout_constraintBottom_toTopOf="@id/middleGuide"
+        android:text="Checkup"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/user_check_svgrepo_com"
+        app:layout_constraintLeft_toRightOf="@id/rightGuide"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/topGuide"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imgDoctorImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#1991E1D8"
+        android:src="@drawable/doctor_6237590"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuide"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/leftGuide"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="20dp" />
+
+    <TextView
+        android:id="@+id/txtDoctorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Dr James Michael" />
+
+    <TextView
+        android:id="@+id/txtDoctorProffession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/txtDoctorName"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        android:layout_marginLeft="15dp"
+        android:text="General Practitioner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

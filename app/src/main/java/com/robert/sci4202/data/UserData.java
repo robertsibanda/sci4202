@@ -62,4 +62,6 @@ public class UserData {
     public String occupation;
 
 
+    @ColumnInfo(name = "ignore_login")
+    public boolean ingoreLogin;
 }

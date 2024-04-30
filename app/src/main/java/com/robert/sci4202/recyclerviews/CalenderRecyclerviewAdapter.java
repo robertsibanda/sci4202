@@ -49,9 +49,9 @@ public class CalenderRecyclerviewAdapter extends RecyclerView.Adapter<CalenderRe
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventTitle = itemView.findViewById(R.id.txtEventTitle);
+            /*eventTitle = itemView.findViewById(R.id.txtEventTitle);
             eventTime = itemView.findViewById(R.id.txtEventTime);
-            txtOtherPerson = itemView.findViewById(R.id.txtOtherPerson);
+            txtOtherPerson = itemView.findViewById(R.id.txtOtherPerson);*/
         }
     }
 }
