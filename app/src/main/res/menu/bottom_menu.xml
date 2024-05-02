@@ -3,25 +3,21 @@
     <item
         android:id="@+id/bottom_home"
         android:title="Home"
-        android:icon="@drawable/home_svgrepo_com"
-        />
+        android:icon="@drawable/home_page_svgrepo_com" />
 
     <item
         android:id="@+id/bottom_calender"
         android:title="Calender"
-        android:icon="@drawable/calendar_svgrepo_com"
-        />
+        android:icon="@drawable/schedule_svgrepo_com" />
 
     <item
         android:id="@+id/bottom_data"
         android:title="Records"
-        android:icon="@drawable/documents_minimalistic_svgrepo_com"
-        />
+        android:icon="@drawable/view_details_svgrepo_com" />
 
     <item
         android:id="@+id/bottom_settings"
         android:title="Settings"
-        android:icon="@drawable/settings_svgrepo_com"
-        />
+        android:icon="@drawable/configuration_gear_multimedia_svgrepo_com" />
 
 </menu>

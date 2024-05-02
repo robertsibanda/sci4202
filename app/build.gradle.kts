@@ -9,8 +9,8 @@ android {
 
     defaultConfig {
         applicationId = "com.robert.sci4202"
-        minSdk = 23
-        targetSdk = 23
+        minSdk = 22
+        targetSdk = 22
         versionCode = 1
         versionName = "1.0"
 

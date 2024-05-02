@@ -169,8 +169,11 @@ public class DoctorPofile extends Fragment {
             }
 
 
-            String date =
+            String date_key =
                     selected + currentMonth + currentYear;
+
+            String date =
+                    selected + "-" + currentMonth + "-" + currentYear;
             new Thread(() -> {
 
                 Map<String, String> params = new HashMap<>();
@@ -179,10 +182,13 @@ public class DoctorPofile extends Fragment {
                 params.put("patient", userData.userID);
                 params.put("time", selectedTime.split(" ")[0]);
                 params.put("date", date.trim());
+                params.put("date_key", date_key.trim());
                 params.put("doctor_name", fullname);
                 params.put("doctor_proff", proffession);
                 params.put("doctor",
                         doctorID);
+                params.put("patient_name", userData.fullName);
+                params.put("patient_contact", userData.contact);
                 params.put("description",
                         etAppointmentDescription.getText().toString());
 

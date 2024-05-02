@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -156,7 +157,6 @@ public class HomeFragment extends Fragment {
                         JSONArray people =
                                 result.getResult().getJSONArray("success");
                         if (finalSearch_type.equals("doctor")) {
-                            //TODO create doctor recyclerview
                             ArrayList<MyDoctorItem> myDoctorItems =
                                     new ArrayList<>();
                             for (int num = 0; num < people.length(); num++) {
@@ -250,16 +250,24 @@ public class HomeFragment extends Fragment {
 
             Map<String, String> params = new HashMap<>();
 
-            String user_type = null;
 
-            if (userData.userType.equals("patient")) {
-                user_type = "patients";
-            } else {
-                user_type = "doctor";
-            }
+            Date theDate = new Date();
+
+            int currentMonth, currentYear;
+            String currentDate;
+
+            currentYear = theDate.getYear();
+            currentMonth = theDate.getMonth();
+            currentDate = String.valueOf(theDate.getDate());
+
+
+            String date_key =
+                    currentDate + currentMonth + currentYear;
+
+
             params.put("userid", userData.userID);
-            params.put("user_type", user_type);
-            params.put("date", "all");
+            params.put("user_type", userData.userType);
+            params.put("date", date_key);
 
             //get user appointments
             try {
@@ -282,38 +290,99 @@ public class HomeFragment extends Fragment {
                 System.out.println(result.getResult());
                 DoctorAppointmentRecyclerviewAdapter calenderRecyclerviewAdapter
                         = new DoctorAppointmentRecyclerviewAdapter();
+                calenderRecyclerviewAdapter.fragment = this;
                 ArrayList<DoctorAppointment> calendars = new ArrayList<>();
 
                 JSONArray appointments =
                         result.getResult().getJSONArray("success");
-                for (int i = 0; i < appointments.length(); i++) {
-                    JSONObject appointment = appointments.getJSONObject(i);
-                    String doctorName, doctorProfession, appointmentDate,
-                            getAppointmentTime, appointmendDescription,
-                            doctor_contact;
 
-                    doctorName = appointment.getString("doctor_name");
-                    doctorProfession = appointment.getString(
-                            "doctor_proff");
+                System.out.println("User type : " + userData.userType);
 
-                    appointmentDate = appointment.getString("date");
-                    getAppointmentTime = appointment.getString("time");
-                    appointmendDescription = appointment.getString(
-                            "description");
-                    calendars.add(new DoctorAppointment(doctorName,
-                            doctorProfession, appointmentDate,
-                            getAppointmentTime, appointmendDescription,
-                            true));
-                }
+                if (Objects.equals(userData.userType, "patient")) {
+                    System.out.println("Showing appointments for " +
+                            "patients");
+                    for (int i = 0; i < appointments.length(); i++) {
+                        JSONObject appointment =
+                                appointments.getJSONObject(i);
+                        String doctorName, doctorProfession,
+                                appointmentDate,
+                                getAppointmentTime,
+                                appointmendDescription, approver,
+                                patientID;
 
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        //Do something on UiThread
-                        recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
-                        calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
-                        recyclerViewNotifications.setAdapter(calenderRecyclerviewAdapter);
+                        doctorName = appointment.getString("doctor_name");
+                        doctorProfession = appointment.getString(
+                                "doctor_proff");
+
+                        appointmentDate = appointment.getString("date");
+                        getAppointmentTime = appointment.getString("time");
+                        appointmendDescription = appointment.getString(
+                                "description");
+                        approver = appointment.getString("approver");
+
+                        patientID = appointment.getString("patient");
+
+                        boolean approved = appointment.getBoolean(
+                                "approved");
+                        boolean rejected = appointment.getBoolean(
+                                "rejected");
+                        calendars.add(new DoctorAppointment(doctorName,
+                                doctorProfession, appointmentDate,
+                                getAppointmentTime, appointmendDescription,
+                                approver, patientID, approved, rejected));
                     }
-                });
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+                            calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
+                            recyclerViewNotifications.setAdapter(calenderRecyclerviewAdapter);
+                        }
+                    });
+                } else {
+                    System.out.println("Showing appointments for " +
+                            "doctors");
+                    for (int i = 0; i < appointments.length(); i++) {
+                        JSONObject appointment =
+                                appointments.getJSONObject(i);
+                        String patientName, appointmentDate,
+                                getAppointmentTime, appointmendDescription,
+                                patientContact, approver, patientID;
+
+                        patientID = appointment.getString("patient");
+                        patientName = appointment.getString(
+                                "patient_name");
+                        patientContact = appointment.getString(
+                                "patient_contact");
+
+                        appointmentDate = appointment.getString("date");
+                        getAppointmentTime = appointment.getString("time");
+                        appointmendDescription = appointment.getString(
+                                "description");
+                        approver = appointment.getString("approver");
+
+                        boolean approved = appointment.getBoolean(
+                                "approved");
+
+                        boolean rejected = appointment.getBoolean(
+                                "rejected");
+
+                        calendars.add(new DoctorAppointment(patientName,
+                                patientContact, appointmentDate,
+                                getAppointmentTime, appointmendDescription,
+                                approver, patientID, approved, rejected));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+                            calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
+                            recyclerViewNotifications.setAdapter(calenderRecyclerviewAdapter);
+                        }
+                    });
+                }
 
 
             } catch (Exception e) {

@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView;
         bottomNavigationView = findViewById(R.id.navBottomNav);
+        bottomNavigationView.setItemIconTintList(null);
 
 
         UserDatabase userDatabase =

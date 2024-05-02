@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Welcome Mr Person"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/topGuideHeader" />
@@ -67,14 +67,17 @@
             android:id="@+id/txtLocationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/gps_location_maps_6_svgrepo_com"
+
             android:text="LOCATION"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@id/middleGuideHeader"
             app:layout_constraintRight_toLeftOf="@id/rightGuideHeader"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:textAlignment="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bulawayo,Zimbabwe"

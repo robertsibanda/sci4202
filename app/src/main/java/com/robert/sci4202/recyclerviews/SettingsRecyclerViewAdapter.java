@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.robert.sci4202.R;
 import com.robert.sci4202.ScanQR;
@@ -53,9 +52,6 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<SettingsRe
                 UserDatabase.getINSTANCE(holder.imgSettings.getContext());
         UserData userData =
                 userDatabase.userDataDAO().getAllUserData().get(0);
-
-        Toast.makeText(holder.btnSettingsCategory.getContext(), "User " +
-                "type : " + userData.userType, Toast.LENGTH_SHORT).show();
 
         switch (settingsCategories.get(position).getImageLocation()) {
             case "history":

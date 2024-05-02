@@ -18,12 +18,13 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/middleGuide" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <TextView
         android:id="@+id/btnAppointmentDate"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#00D2D2D2"
         android:drawableLeft="@drawable/calendar_svgrepo_com"
         android:text="20 NOV 2024"
@@ -32,18 +33,19 @@
         app:layout_constraintTop_toBottomOf="@id/txtDateLabel" />
 
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <TextView
         android:id="@+id/btnAppointmentTime"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#00D2D2D2"
         android:drawableLeft="@drawable/alarm_play_svgrepo_com"
+        android:padding="5dp"
+        android:layout_margin="8dp"
+        android:textSize="18sp"
         android:text="10:30"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btnAppointmentDate"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtDateLabel" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -68,6 +70,13 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/minGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/middleGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,21 +87,52 @@
         android:id="@+id/txtAppointmentDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/topGuide"
+        android:text="CheckupCheckup"
+        android:textAlignment="viewStart"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/middleGuide"
-        android:text="Checkup"
-        app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        android:layout_marginLeft="15dp"
-        android:textStyle="bold" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuide"
+        app:layout_constraintStart_toStartOf="@+id/leftGuide"
+        app:layout_constraintTop_toBottomOf="@id/topGuide" />
 
     <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imgApproved"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/user_check_svgrepo_com"
+        android:layout_margin="5dp"
+        android:src="@drawable/calendar_accept"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuide"
         app:layout_constraintLeft_toRightOf="@id/rightGuide"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/topGuide"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtAppointmentApproved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="8dp"
+        android:text="Approve"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.714"
+        app:layout_constraintStart_toStartOf="@+id/rightGuide"
+        app:layout_constraintTop_toBottomOf="@id/topGuide" />
+
+
+    <ImageView
+        android:id="@+id/imgReject"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/calendar_reject"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rightGuide"
+        app:layout_constraintTop_toTopOf="@+id/middleGuide" />
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imgDoctorImage"
@@ -113,7 +153,7 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toRightOf="@id/leftGuide"
         app:layout_constraintTop_toTopOf="parent"
         android:text="Dr James Michael" />
@@ -122,10 +162,9 @@
         android:id="@+id/txtDoctorProffession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="General Practitioner"
         android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@id/txtDoctorName"
-        app:layout_constraintLeft_toRightOf="@id/leftGuide"
-        android:layout_marginLeft="15dp"
-        android:text="General Practitioner" />
+        app:layout_constraintStart_toStartOf="@+id/leftGuide"
+        app:layout_constraintTop_toBottomOf="@id/txtDoctorName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

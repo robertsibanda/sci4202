@@ -1,41 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="400dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ShareRecords">
 
-    <TextView
-        android:id="@+id/txtHeading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="Permsissions can be revoked on next section (Shared)"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:textSize="18sp" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btnGenerateQR"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etPAsscode"
+        android:layout_width="0dp"
         android:layout_height="40dp"
-        android:text="Generate QR"
-        app:layout_constraintTop_toBottomOf="@id/txtHeading"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:hint="Passcode"
+        android:textAlignment="center"
+        android:layout_margin="5dp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuide"
+        app:layout_constraintRight_toLeftOf="@id/rightGuide"
+        app:layout_constraintTop_toBottomOf="@id/txtHeading" />
 
     <ImageView
         android:id="@+id/imgQRGenerated"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnGenerateQR"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="15dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGenerateQR" />
+
+
+    <TextView
+        android:id="@+id/txtHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Permsissions can be revoked on next section (Shared)"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnGenerateQR"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:text="Generate QR"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPAsscode" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
