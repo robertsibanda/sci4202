@@ -98,6 +98,8 @@ public class PatientInforFragment extends Fragment {
 
                     MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
                             new MyDoctorRecyclerviewAdapter();
+                    myDoctorRecyclerviewAdapter.fragmentManager =
+                            getParentFragmentManager();
 
                     myDoctorRecyclerviewAdapter.frag = "care2";
 
@@ -145,7 +147,7 @@ public class PatientInforFragment extends Fragment {
                             String userid = person.getString("userid");
 
                             String biography = person.getString("bio");
-                            
+
                             myDoctorItems.add(new MyDoctorItem(fullname,
                                     "",
                                     contact, occupation, organistion,

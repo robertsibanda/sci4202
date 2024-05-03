@@ -232,6 +232,8 @@ public class CareFragment extends Fragment {
 
                 MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
                         new MyDoctorRecyclerviewAdapter();
+                myDoctorRecyclerviewAdapter.fragmentManager =
+                        getParentFragmentManager();
 
                 myDoctorRecyclerviewAdapter.frag = "care";
 
