@@ -61,6 +61,11 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container,
                 false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recviewHome);
+
+        RecyclerView recyclerViewNotifications =
+                view.findViewById(R.id.recViewNotifications);
         EditText etSearchText = view.findViewById(R.id.etSearchText);
 
 
@@ -81,6 +86,80 @@ public class HomeFragment extends Fragment {
             TextView txtFullName = view.findViewById(R.id.txtFullName);
             String txt = "Welcome " + fullName;
             txtFullName.setText(txt);
+
+            new Thread(() -> {
+
+                //get my doctors
+                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("userid", userData.userID);
+
+                MyDoctorRecyclerviewAdapter myDoctorRecyclerviewAdapter =
+                        new MyDoctorRecyclerviewAdapter();
+
+                myDoctorRecyclerviewAdapter.frag = "care";
+
+                ArrayList<MyDoctorItem> myDoctorItems = new ArrayList<>();
+
+                try {
+                    ServerResult result = RPCRequests.sendRequest(
+                            "get_my_doctors",
+                            params);
+                    System.out.println("Result : " + result.getResult());
+                    try {
+                        result.getResult().get("success");
+                    } catch (Exception ex) {
+                        try {
+                            Toast.makeText(view.getContext(),
+                                    result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(view.getContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    System.out.println(result.getResult());
+                    JSONArray people =
+                            result.getResult().getJSONArray("success");
+                    for (int num = 0; num < people.length(); num++) {
+                        JSONObject person =
+                                people.getJSONObject(num);
+                        String fullname = person.getString(
+                                "fullname");
+                        String contact = person.getString(
+                                "contact");
+
+                        String organistion = person.getString(
+                                "organisation");
+                        boolean canView = person.getBoolean(
+                                "view");
+                        boolean canUpdate = person.getBoolean(
+                                "update");
+
+                        String occupation = person.getString(
+                                "occupation");
+
+                        String userid = person.getString("userid");
+
+                        String biography = person.getString("bio");
+
+                        myDoctorItems.add(new MyDoctorItem(fullname, "",
+                                contact, occupation, organistion, userid
+                                , canView, canUpdate, biography));
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            //Do something on UiThread
+                            myDoctorRecyclerviewAdapter.setMyDoctorItems(myDoctorItems);
+                            recyclerView.setAdapter(myDoctorRecyclerviewAdapter);
+                        }
+                    });
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         }
 
 
@@ -94,10 +173,6 @@ public class HomeFragment extends Fragment {
                 .into(roundedImageView);
                 */
 
-        RecyclerView recyclerView = view.findViewById(R.id.recviewHome);
-
-        RecyclerView recyclerViewNotifications =
-                view.findViewById(R.id.recViewNotifications);
 
         etSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -248,6 +323,7 @@ public class HomeFragment extends Fragment {
 
         new Thread(() -> {
 
+            // get upcoming appointments
             Map<String, String> params = new HashMap<>();
 
 
