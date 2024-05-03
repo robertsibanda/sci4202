@@ -88,10 +88,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CheckupCheckup"
+        android:layout_marginLeft="5dp"
         android:textAlignment="viewStart"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/middleGuide"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuide"
         app:layout_constraintStart_toStartOf="@+id/leftGuide"
         app:layout_constraintTop_toBottomOf="@id/topGuide" />
 
@@ -161,6 +161,7 @@
     <TextView
         android:id="@+id/txtDoctorProffession"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
         android:text="General Practitioner"
         android:textSize="15sp"

@@ -159,7 +159,7 @@ public class DoctorPofile extends Fragment {
             int currentMonth, currentYear;
 
             currentYear = theDate.getYear();
-            currentMonth = theDate.getMonth();
+            currentMonth = theDate.getMonth(;
 
             System.out.println("Current year : " + currentYear);
             if ((theDate.getDate() > 24) && (Integer.parseInt(selected.trim()) < 24)) {
@@ -173,7 +173,7 @@ public class DoctorPofile extends Fragment {
                     selected + currentMonth + currentYear;
 
             String date =
-                    selected + "-" + currentMonth + "-" + currentYear;
+                    selected + "-" + (currentMonth + 1) + "-" + (currentYear + 1900);
             new Thread(() -> {
 
                 Map<String, String> params = new HashMap<>();

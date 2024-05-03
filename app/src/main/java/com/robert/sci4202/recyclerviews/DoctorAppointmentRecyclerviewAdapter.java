@@ -58,11 +58,11 @@ public class DoctorAppointmentRecyclerviewAdapter extends RecyclerView.Adapter<D
         boolean rejected = doctorAppointments.get(position).isRejected();
 
         if (approved) {
-            holder.txtAppointmentApproved.setVisibility(View.VISIBLE);
             holder.imgReject.setVisibility(View.GONE);
             holder.imgApproved.setImageDrawable(holder.imgApproved.getResources().getDrawable(R.drawable.calendar_approved));
         } else if (rejected) {
-            holder.imgApproved.setImageDrawable(holder.btnTime.getResources().getDrawable(R.drawable.calendar_reject));
+            holder.imgApproved.setImageDrawable(holder.btnTime.getResources().getDrawable(R.drawable.calendar_reject_2));
+            holder.imgReject.setVisibility(View.GONE);
         } else {
             String approver =
                     doctorAppointments.get(position).getApprover();
@@ -81,15 +81,16 @@ public class DoctorAppointmentRecyclerviewAdapter extends RecyclerView.Adapter<D
                         Map<String, String> params = new HashMap<>();
 
                         params.put("doctor", userData.userID);
+                        params.put("update", "approve");
                         params.put("patient", appointment.getPatientID());
                         params.put("time",
                                 appointment.getGetAppointmentTime());
                         params.put("date",
                                 appointment.getAppointmentDate());
-                       
+
                         try {
                             ServerResult result = RPCRequests.sendRequest(
-                                    "accept_appointment",
+                                    "update_appointment",
                                     params);
                             System.out.println("Result : " + result.getResult());
                             try {
@@ -132,13 +133,14 @@ public class DoctorAppointmentRecyclerviewAdapter extends RecyclerView.Adapter<D
 
                         params.put("doctor", userData.userID);
                         params.put("patient", appointment.getPatientID());
+                        params.put("update", "reject");
                         params.put("time",
                                 appointment.getGetAppointmentTime());
                         params.put("date",
                                 appointment.getAppointmentDate());
                         try {
                             ServerResult result = RPCRequests.sendRequest(
-                                    "reject_appointment",
+                                    "update_appointment",
                                     params);
                             System.out.println("Result : " + result.getResult());
                             try {

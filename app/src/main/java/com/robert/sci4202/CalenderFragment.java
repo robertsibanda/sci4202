@@ -5,23 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.robert.sci4202.comm.RPCRequests;
+import com.robert.sci4202.comm.ServerResult;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
-import com.robert.sci4202.objects.CalenderItem;
-import com.robert.sci4202.recyclerviews.CalenderRecyclerviewAdapter;
+import com.robert.sci4202.objects.DoctorAppointment;
+import com.robert.sci4202.recyclerviews.DoctorAppointmentRecyclerviewAdapter;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
@@ -52,6 +51,8 @@ public class CalenderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Fragment currentFragment = this;
+
         View view = inflater.inflate(R.layout.fragment_calender,
                 container, false);
 
@@ -63,10 +64,8 @@ public class CalenderFragment extends Fragment {
         UserDatabase userDatabase =
                 UserDatabase.getINSTANCE(view.getContext());
 
-        List<UserData> userData =
-                userDatabase.userDataDAO().getAllUserData();
-
-        String userType = userData.get(0).userType;
+        UserData userData =
+                userDatabase.userDataDAO().getAllUserData().get(0);
 
         CalendarView calendarView = view.findViewById(R.id.datePicker);
 
@@ -79,98 +78,162 @@ public class CalenderFragment extends Fragment {
                 Calendar c = Calendar.getInstance();
                 c.set(year, month, day);
 
-                JSONObject params = new JSONObject();
+                new Thread(() -> {
+
+                    String date_key =
+                            day + "" + month + "" + (year - 1900);
+
+                    DoctorAppointmentRecyclerviewAdapter calenderRecyclerviewAdapter
+                            =
+                            new DoctorAppointmentRecyclerviewAdapter();
+                    calenderRecyclerviewAdapter.fragment = currentFragment;
+
+                    Map<String, String> params = new HashMap<>();
 
 
-                try {
-                    params.put("year", year);
-                    params.put("day", day);
-                    params.put("month", month);
-                    params.put("user_type", userType);
-                    params.put("authorization",
-                            "Bearer " + userDatabase.userDataDAO().getAllUserData().get(0).accessToken);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+                    params.put("userid", userData.userID);
+                    params.put("user_type", userData.userType);
+                    params.put("date", date_key);
 
-                RequestQueue requestQueue =
-                        Volley.newRequestQueue(view.getContext());
-                String url = getString(R.string.endpoint) + "basic" +
-                        "/appointments";
-                JsonObjectRequest jsonObjectRequest =
-                        new JsonObjectRequest(
-                                Request.Method.POST,
-                                url,
-                                params,
-                                response -> {
-                                    try {
-                                        System.out.println("REsponse for" +
-                                                " calender : " + response);
-                                        JSONArray appointments =
-                                                response.getJSONArray(
-                                                        "appointments");
-                                        ArrayList<CalenderItem> events =
-                                                new ArrayList<>();
+                    //get user appointments
+                    try {
+                        ServerResult result = RPCRequests.sendRequest(
+                                "get_appointments",
+                                params);
+                        System.out.println("Appointments : " + result.getResult());
+                        try {
+                            result.getResult().get("success");
+                        } catch (Exception ex) {
+                            try {
+                                Toast.makeText(view.getContext(),
+                                        result.getResult().get("error").toString(), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(view.getContext(),
+                                        e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        System.out.println(result.getResult());
 
-                                        for (int num = 0; num < appointments.length(); num++) {
-                                            JSONObject person =
-                                                    appointments.getJSONObject(num);
+                        ArrayList<DoctorAppointment> calendars =
+                                new ArrayList<>();
 
-                                            String day_ =
-                                                    person.getString(
-                                                            "day");
-                                            String month_ =
-                                                    person.getString(
-                                                            "month");
-                                            String year_ =
-                                                    person.getString(
-                                                            "year");
-                                            String date =
-                                                    day_ + "/" + month_ + "/" + year_;
+                        JSONArray appointments =
+                                result.getResult().getJSONArray("success");
 
-                                            String minute =
-                                                    person.getString(
-                                                            "minute");
-                                            String hour =
-                                                    person.getString(
-                                                            "hour");
+                        System.out.println("User type : " + userData.userType);
 
-                                            String time =
-                                                    hour + ":" + minute;
+                        if (Objects.equals(userData.userType, "patient")) {
+                            System.out.println("Showing appointments for" +
+                                    " " +
+                                    "patients");
+                            for (int i = 0; i < appointments.length(); i++) {
+                                JSONObject appointment =
+                                        appointments.getJSONObject(i);
+                                String doctorName, doctorProfession,
+                                        appointmentDate,
+                                        getAppointmentTime,
+                                        appointmendDescription, approver,
+                                        patientID;
 
-                                            String title =
-                                                    person.getString(
-                                                            "description");
-                                            String other_person;
-                                            if (Objects.equals(userType,
-                                                    "doctor")) {
-                                                other_person =
-                                                        person.getString(
-                                                                "patient");
+                                doctorName = appointment.getString(
+                                        "doctor_name");
+                                doctorProfession = appointment.getString(
+                                        "doctor_proff");
 
-                                            } else {
-                                                other_person =
-                                                        "Dr " + person.getString("doctor");
-                                            }
-                                            events.add(new CalenderItem(title, date, time, other_person));
-                                        }
+                                appointmentDate = appointment.getString(
+                                        "date");
+                                getAppointmentTime =
+                                        appointment.getString("time");
+                                appointmendDescription =
+                                        appointment.getString(
+                                                "description");
+                                approver = appointment.getString(
+                                        "approver");
+
+                                patientID = appointment.getString(
+                                        "patient");
+
+                                boolean approved = appointment.getBoolean(
+                                        "approved");
+                                boolean rejected = appointment.getBoolean(
+                                        "rejected");
+                                calendars.add(new DoctorAppointment(doctorName,
+                                        doctorProfession, appointmentDate,
+                                        getAppointmentTime,
+                                        appointmendDescription,
+                                        approver, patientID, approved,
+                                        rejected));
+                            }
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    //Do something on UiThread
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+                                    calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
+                                    recyclerView.setAdapter(calenderRecyclerviewAdapter);
+                                }
+                            });
+                        } else {
+                            System.out.println("Showing appointments for" +
+                                    " " +
+                                    "doctors");
+                            for (int i = 0; i < appointments.length(); i++) {
+                                JSONObject appointment =
+                                        appointments.getJSONObject(i);
+                                String patientName, appointmentDate,
+                                        getAppointmentTime,
+                                        appointmendDescription,
+                                        patientContact, approver,
+                                        patientID;
+
+                                patientID = appointment.getString(
+                                        "patient");
+                                patientName = appointment.getString(
+                                        "patient_name");
+                                patientContact = appointment.getString(
+                                        "patient_contact");
+
+                                appointmentDate = appointment.getString(
+                                        "date");
+                                getAppointmentTime =
+                                        appointment.getString("time");
+                                appointmendDescription =
+                                        appointment.getString(
+                                                "description");
+                                approver = appointment.getString(
+                                        "approver");
+
+                                boolean approved = appointment.getBoolean(
+                                        "approved");
+
+                                boolean rejected = appointment.getBoolean(
+                                        "rejected");
+
+                                calendars.add(new DoctorAppointment(patientName,
+                                        patientContact, appointmentDate,
+                                        getAppointmentTime,
+                                        appointmendDescription,
+                                        approver, patientID, approved,
+                                        rejected));
+                            }
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    //Do something on UiThread
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+                                    calenderRecyclerviewAdapter.setDoctorAppointments(calendars);
+                                    recyclerView.setAdapter(calenderRecyclerviewAdapter);
+                                }
+                            });
+                        }
 
 
-                                        CalenderRecyclerviewAdapter calenderRecyclerviewAdapter1 =
-                                                new CalenderRecyclerviewAdapter();
-                                        calenderRecyclerviewAdapter1.setCalenderItems(events);
+                    } catch (Exception e) {
+                        System.out.println("Error : " + e.getMessage());
+                    }
+                }).start();
 
-                                        recyclerView.setAdapter(calenderRecyclerviewAdapter1);
-                                    } catch (Exception ex) {
-                                        throw new RuntimeException(ex);
-                                    }
-                                },
-                                error -> {
-                                    System.out.println("Error : " + error);
-                                });
-
-
-                requestQueue.add(jsonObjectRequest);
             }
         });
         return view;
