@@ -120,7 +120,7 @@
             android:id="@+id/imgUserProfile"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/robert"
+            android:src="@drawable/user_account_person_avatar_svgrepo_com"
             app:layout_constraintBottom_toTopOf="@id/topGuideHeader"
             app:layout_constraintLeft_toRightOf="@id/rightGuideHeader"
             app:layout_constraintRight_toRightOf="parent"

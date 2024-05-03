@@ -272,7 +272,7 @@ public class HomeFragment extends Fragment {
             //get user appointments
             try {
                 ServerResult result = RPCRequests.sendRequest(
-                        "get_appointments",
+                        "get_upcoming_appointments",
                         params);
                 System.out.println("Appointments : " + result.getResult());
                 try {

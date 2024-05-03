@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.robert.sci4202.PatientAccountHistory;
 import com.robert.sci4202.R;
 import com.robert.sci4202.ScanQR;
+import com.robert.sci4202.SettingsPrivacyFragment;
+import com.robert.sci4202.SettingsSecurityFragment;
 import com.robert.sci4202.ShareRecords;
 import com.robert.sci4202.data.UserData;
 import com.robert.sci4202.data.UserDatabase;
@@ -55,7 +58,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<SettingsRe
 
         switch (settingsCategories.get(position).getImageLocation()) {
             case "history":
-                holder.imgSettings.setImageResource(R.drawable.history_2_svgrepo_com);
+                holder.imgSettings.setImageResource(R.drawable.pratt_and_whitney_certificate_of_deposit_svgrepo_com);
                 holder.btnSettingsCategory.setOnClickListener(l -> {
                     //load history
                     System.out.println("Showing account history");
@@ -63,15 +66,15 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<SettingsRe
                 });
                 break;
             case "privacy":
-                holder.imgSettings.setImageResource(R.drawable.lock_keyhole_minimalistic_unlocked_svgrepo_com);
+                holder.imgSettings.setImageResource(R.drawable.shield_user_svgrepo_com);
                 holder.btnSettingsCategory.setOnClickListener(l -> {
-                    //load settings fragment, Require no password
+                    ShowFragment(new SettingsPrivacyFragment());
                 });
                 break;
             case "security":
-                holder.imgSettings.setImageResource(R.drawable.password_svgrepo_com);
+                holder.imgSettings.setImageResource(R.drawable.guard_lock_padlock_svgrepo_com);
                 holder.btnSettingsCategory.setOnClickListener(l -> {
-                    //load settings change passowrd
+                    ShowFragment(new SettingsSecurityFragment());
                 });
                 break;
             case "qr":

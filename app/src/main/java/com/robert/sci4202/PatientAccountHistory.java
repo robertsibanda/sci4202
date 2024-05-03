@@ -1,20 +1,18 @@
-package com.robert.sci4202.recyclerviews;
+package com.robert.sci4202;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.robert.sci4202.R;
-
 import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SettingsSecurityFragment#newInstance} factory method to
+ * Use the {@link PatientAccountHistory#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsSecurityFragment extends Fragment {
+public class PatientAccountHistory extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +23,7 @@ public class SettingsSecurityFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SettingsSecurityFragment() {
+    public PatientAccountHistory() {
         // Required empty public constructor
     }
 
@@ -35,12 +33,12 @@ public class SettingsSecurityFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsSecurityFragment.
+     * @return A new instance of fragment PatientAccountHistory.
      */
     // TODO: Rename and change types and number of parameters
-    public static SettingsSecurityFragment newInstance(String param1,
-                                                       String param2) {
-        SettingsSecurityFragment fragment = new SettingsSecurityFragment();
+    public static PatientAccountHistory newInstance(String param1,
+                                                    String param2) {
+        PatientAccountHistory fragment = new PatientAccountHistory();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,7 +59,6 @@ public class SettingsSecurityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings_security,
-                container, false);
+        return inflater.inflate(R.layout.fragment_patient_account_history, container, false);
     }
 }
